@@ -1,0 +1,1 @@
+/home/vledhint/Documents/ShopifyProjects/indigo-store-theme/AGENTS.md
