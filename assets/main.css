@@ -8,6 +8,7 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-gray-400: oklch(70.7% 0.022 261.325);
+    --spacing: 0.25rem;
     --container-sm: 24rem;
     --container-lg: 32rem;
     --default-font-family: var(--font-sans);
@@ -175,6 +176,9 @@
   .static {
     position: static;
   }
+  .mx-auto {
+    margin-inline: auto;
+  }
   .block {
     display: block;
   }
@@ -190,8 +194,20 @@
   .inline {
     display: inline;
   }
+  .table {
+    display: table;
+  }
   .h-auto {
     height: auto;
+  }
+  .w-32 {
+    width: calc(var(--spacing) * 32);
+  }
+  .w-1200 {
+    width: calc(var(--spacing) * 1200);
+  }
+  .w-\[1200px\] {
+    width: 1200px;
   }
   .w-full {
     width: 100%;
@@ -219,6 +235,12 @@
   }
   .object-cover {
     object-fit: cover;
+  }
+  .object-fill {
+    object-fit: fill;
+  }
+  .text-center {
+    text-align: center;
   }
   .capitalize {
     text-transform: capitalize;
