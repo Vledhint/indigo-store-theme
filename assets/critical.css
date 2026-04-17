@@ -1,4 +1,6 @@
 /** Critical CSS for the theme. This file is included on every page. */
-@import "tailwindcss";
 
 /* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
+.bag-icon svg {
+    color: #fff;
+}

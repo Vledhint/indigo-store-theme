@@ -15,4 +15,9 @@
 # Tailwind CSS source/config files — the compiled output (assets/tailwind.css) is uploaded
 assets/tailwind.config.js
 
+# Node / build tooling
+package.json
+package-lock.json
+node_modules/
+
 *.tmp
