@@ -9,6 +9,7 @@
     "collections": "Collections",
     "collection_card": "Collection card",
     "collections_grid": "Collections grid",
+    "indigo_grid": "Indigo Grid",
     "colors": "Colors",
     "column": "Column",
     "content": "Content",
@@ -31,6 +32,7 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
+    "ticker_item": "Ticker Item",
     "typography": "Typography"
   },
   "labels": {

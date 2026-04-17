@@ -1,0 +1,51 @@
+{% comment %}
+  Special Grid for displaying products in a customizable grid layout.
+  This section allows merchants to choose from wich category they want to show the products.
+{% endcomment %}
+
+<div class="grid grid-columns-2 gap-5" >
+    <div class="main-product">
+        <img src="https://cdn.shopify.com/s/files/1/0680/4150/7113/files/Rectangle_16.png?v=1690964168" alt="Main Product" class="w-full h-auto" width="500" height="600" />
+    </div>
+    <div class="secondary-products grid grid-rows-2 gap-5">
+        <img src="https://cdn.shopify.com/s/files/1/0680/4150/7113/files/Rectangle_17.png?v=1690964168" alt="Secondary Product 1" class="w-full h-auto" width="500" height="600" />
+        <img src="https://cdn.shopify.com/s/files/1/0680/4150/7113/files/Rectangle_18.png?v=1690964168" alt="Secondary Product 2" class="w-full h-auto" width="500" height="600" />
+    </div>"
+  {% comment %}
+  {% for collection in collections %}
+    <a class="collection-card" href="{{ collection.url }}">
+      {% if collection.featured_image %}
+        {% render 'image',
+          class: 'collection-card__image',
+          image: collection.featured_image,
+          width: 600,
+          height: 600,
+          crop: 'center'
+        %}
+      {% endif %}
+
+      <div class="collection-card__content">
+        <p>{{ collection.title }}</p>
+
+        {% if collection.description %}
+          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
+        {% endif %}
+      </div>
+    </a>
+  {% endfor %}
+   {% endcomment %}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.indigo_grid",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection to display"
+    },
+  ],
+  "presets": [{ "name": "t:general.collections_grid" }]
+}
+{% endschema %}

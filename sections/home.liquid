@@ -12,73 +12,157 @@
   </div>
 </section>
 
-<div class="issues bg-[#1F3D7C] px-2 py-8 w-full">
-  <div class="issues-grid grid grid-cols-4 gap-8 w-full sm:w-2/3 mx-auto">
-    <div class="text-white text-center">
-      <h3 class="text-xs uppercase">Lavado</h3>
-      <p class="highlight-description">Eco Friendly</p>
-    </div>
+<section id="issues-section">
+  <div class="issues bg-[#1F3D7C] px-2 py-8 w-full">
+    <div class="issues-grid grid grid-cols-4 gap-8 w-full sm:w-2/3 mx-auto">
+      <div class="text-white text-center">
+        <h3 class="text-xs uppercase">Lavado</h3>
+        <p class="highlight-description">Eco Friendly</p>
+      </div>
 
-    <div class="text-white text-center">
-      <h3 class="text-xs uppercase">Telas</h3>
-      <p class="highlight-description">Duraderas</p>
-    </div>
+      <div class="text-white text-center">
+        <h3 class="text-xs uppercase">Telas</h3>
+        <p class="highlight-description">Duraderas</p>
+      </div>
 
-    <div class="text-white text-center">
-      <h3 class="text-xs uppercase">Costuras</h3>
-      <p class="highlight-description">Resistentes</p>
-    </div>
+      <div class="text-white text-center">
+        <h3 class="text-xs uppercase">Costuras</h3>
+        <p class="highlight-description">Resistentes</p>
+      </div>
 
-    <div class="text-white text-center">
-      <h3 class="text-xs uppercase">Fit</h3>
-      <p class="highlight-description">Ajustables</p>
+      <div class="text-white text-center">
+        <h3 class="text-xs uppercase">Fit</h3>
+        <p class="highlight-description">Ajustables</p>
+      </div>
+    </div> 
+  </div>
+</section>
+{%-  liquid
+  assign grid = section.settings.per_row
+-%}
+<section id="banner">
+  <div class="banner-container w-full bg-black text-white overflow-hidden">
+    <div class="banner-track flex w-full" aria-hidden="true">
+      <ul class="banner-list flex list-none text-2xl uppercase py-4 w-auto">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'ticker_item' -%}
+            <li class="whitespace-nowrap px-8 px-2 text-2xl uppercase">
+              {{- block.settings.text -}}
+            </li>
+            <li class="whitespace-nowrap text-2xl uppercase">&middot;</li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
     </div>
-  </div> 
-</div>
+  </div>
+</section>
+
+<section id="collections-section">
+  {%  unless section.settings.product_list == empty %}
+    <div class="collections-container w-full py-8">
+      <div class="collections-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full sm:w-4/5 mx-auto">
+        {% for product in section.settings.product_list %}
+          <a href="{{ product.url }}" class="block">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title }}" class="w-full h-auto mb-4" width="500" height="600" />
+            {% endif %}
+            <h3 class="text-lg text-center">{{ product.title }}</h3>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    
+  {% endunless %}
+</section>
 
 
 {% stylesheet %}
-  .welcome {
-  }
-
-  .welcome-content {
-  }
-
-  .welcome-description {
-  }
-
-  .icon {
-    width: 300px;
-  }
-
-  .highlights {
-  }
-
-
-  .highlight {
-  }
-
-  .highlight > * + * {
-  }
-
-  .highlight h3 {
-  }
-
   .highlight-description {
   }
 
-  .highlight a {
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+
+  .banner-list {
+    animation: ticker var(--ticker-speed, 20s) linear infinite;
+  }
+
+  .banner-track:hover .banner-list {
+    animation-play-state: paused;
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    const track = document.querySelector('.banner-track');
+    if (!track) return;
+
+    const list = track.querySelector('.banner-list');
+    const clone = list.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    track.appendChild(clone);
+
+    const itemCount = list.querySelectorAll('li').length;
+    const speed = Math.max(1, itemCount * 5);
+    list.style.setProperty('--ticker-speed', speed + 's');
+    clone.style.setProperty('--ticker-speed', speed + 's');
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
   "name": "Home",
-  "settings": [],
+  "settings": [
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products de Hombre"
+    },
+    {
+      "type": "range",
+      "id": "per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Products per row",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Products shown",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ticker_item",
+      "name": "Ticker item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "New item"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
       "name": "Home Template",
-      "category": "Indigo"
+      "category": "Indigo",
+      "blocks": [
+        { "type": "ticker_item", "settings": { "text": "Hombre" } },
+        { "type": "ticker_item", "settings": { "text": "Mujer" } },
+        { "type": "ticker_item", "settings": { "text": "Denim" } },
+        { "type": "ticker_item", "settings": { "text": "Nueva coleccion" } }
+      ]
     }
   ]
 }
