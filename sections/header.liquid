@@ -1,35 +1,41 @@
-<header class="site-header">
-  <nav class="header__nav" aria-label="Main navigation">
+<header class="bg-[#1F3D7C] h-20 flex items-center justify-between px-8 sticky top-0 z-[100] md:px-4">
+  <nav class="flex gap-8 flex-1 md:gap-4" aria-label="Main navigation">
     {%- for link in section.settings.menu.links -%}
-      <a href="{{ link.url }}" class="header__nav-link">{{ link.title }}</a>
+      <a href="{{ link.url }}" class="text-white no-underline text-[11px] font-extrabold uppercase tracking-[0.12em] hover:opacity-65 transition-opacity">
+        {{- link.title -}}
+      </a>
     {%- endfor -%}
   </nav>
 
-  <div class="header__logo">
-    <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+  <div class="flex-1 flex justify-center">
+    <a href="{{ routes.root_url }}" class="no-underline text-white" aria-label="{{ shop.name }}">
       {%- if section.settings.logo -%}
-        {{ section.settings.logo | image_url: width: 140 | image_tag: loading: 'eager', class: 'header__logo-img' }}
+        {{ section.settings.logo | image_url: width: 140 | image_tag: loading: 'eager', class: 'max-h-11 w-auto block' }}
       {%- else -%}
-        <span class="header__logo-text">
-          <span class="header__logo-indigo">IND<span class="header__logo-highlight">I</span>GO</span>
-          <span class="header__logo-store">STORE</span>
+        <span class="flex flex-col items-center leading-none gap-0.5">
+          <span class="text-xl font-black tracking-[0.18em] uppercase">
+            IND<span class="inline-block border-2 border-white rounded-full w-[1.05em] h-[1.05em] leading-[0.85] text-center mx-px align-middle">I</span>GO
+          </span>
+          <span class="text-[9px] font-bold tracking-[0.5em] uppercase">STORE</span>
         </span>
       {%- endif -%}
     </a>
   </div>
 
-  <div class="header__actions">
-    <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  <div class="flex items-center gap-5 flex-1 justify-end">
+    <a href="{{ routes.search_url }}" class="text-white no-underline flex items-center justify-center hover:opacity-65 transition-opacity" aria-label="Search">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </a>
     {%- if shop.customer_accounts_enabled -%}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}" class="header__icon">
+      <shopify-account menu="{{ section.settings.customer_account_menu }}" class="flex items-center justify-center text-white hover:opacity-65 transition-opacity cursor-pointer">
         {{ 'icon-account.svg' | inline_asset_content }}
       </shopify-account>
     {%- endif -%}
-    <a href="{{ routes.cart_url }}" class="header__icon header__cart" aria-label="Cart ({{ cart.item_count }} items)">
+    <a href="{{ routes.cart_url }}" class="relative text-white no-underline flex items-center justify-center hover:opacity-65 transition-opacity" aria-label="Cart ({{ cart.item_count }} items)">
       {%- if cart.item_count > 0 -%}
-        <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+        <span class="absolute -top-1.5 -right-1.5 bg-white text-[#1F3D7C] text-[9px] font-extrabold rounded-full min-w-[1rem] h-4 flex items-center justify-center px-0.5 leading-none" aria-hidden="true">
+          {{- cart.item_count -}}
+        </span>
       {%- endif -%}
       {{ 'icon-cart.svg' | inline_asset_content }}
     </a>
@@ -37,141 +43,15 @@
 </header>
 
 {% stylesheet %}
-  .site-header {
-    background: #1F3D7C;
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header__nav {
-    display: flex;
-    gap: 2rem;
-    flex: 1;
-  }
-  .header__nav-link {
-    color: #fff;
-    text-decoration: none;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    transition: opacity 0.2s;
-  }
-  .header__nav-link:hover {
-    opacity: 0.65;
-  }
-  .header__logo {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-  .header__logo a {
-    text-decoration: none;
-    color: #fff;
-    display: block;
-  }
-  .header__logo-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
-    gap: 2px;
-  }
-  .header__logo-indigo {
-    font-size: 1.35rem;
-    font-weight: 900;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-  .header__logo-highlight {
-    display: inline-block;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    width: 1.1em;
-    height: 1.1em;
-    line-height: 0.9;
-    text-align: center;
-    margin: 0 1px;
-  }
-  .header__logo-store {
-    font-size: 0.55rem;
-    font-weight: 700;
-    letter-spacing: 0.55em;
-    text-transform: uppercase;
-  }
-  .header__logo-img {
-    max-height: 2.75rem;
-    width: auto;
-    display: block;
-  }
-  .header__actions {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    flex: 1;
-    justify-content: flex-end;
-  }
-  .header__icon {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: opacity 0.2s;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-  }
-  .header__icon:hover {
-    opacity: 0.65;
-  }
-  .header__icon svg {
+  .site-header shopify-account svg,
+  .site-header svg {
     width: 1.4rem;
     height: 1.4rem;
-    display: block;
   }
-  .header__cart {
-    position: relative;
-  }
-  .header__cart-count {
-    position: absolute;
-    top: -0.45rem;
-    right: -0.55rem;
-    background: #fff;
-    color: #1F3D7C;
-    font-size: 0.55rem;
-    font-weight: 800;
-    border-radius: 50%;
-    min-width: 1rem;
-    height: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 2px;
-    line-height: 1;
-  }
-  @media (max-width: 768px) {
-    .site-header {
-      padding: 0 1rem;
-    }
-    .header__nav {
-      gap: 0.875rem;
-    }
-    .header__nav-link {
-      font-size: 0.6rem;
-    }
-  }
-  @media (max-width: 480px) {
-    .header__logo-indigo {
-      font-size: 1.1rem;
-    }
+  shopify-account svg {
+    color: #fff;
+    fill: none;
+    stroke: currentColor;
   }
 {% endstylesheet %}
 

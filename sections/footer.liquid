@@ -1,72 +1,25 @@
-<footer class="site-footer">
-  <div class="footer__inner">
-    <div class="footer__col">
-      <h3 class="footer__col-title">{{ section.settings.col1_title }}</h3>
+<footer class="bg-black text-white py-12 px-8 mt-auto">
+  <div class="grid grid-cols-3 sm:grid-cols-1 gap-8 max-w-[960px] mx-auto">
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-[10px] font-extrabold uppercase tracking-[0.1em] text-white mb-1">{{ section.settings.col1_title }}</h3>
       {%- for link in section.settings.col1_menu.links -%}
-        <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="text-[11px] font-bold uppercase tracking-wide text-gray-400 no-underline hover:text-white transition-colors leading-relaxed">{{ link.title }}</a>
       {%- endfor -%}
     </div>
-    <div class="footer__col">
-      <h3 class="footer__col-title">{{ section.settings.col2_title }}</h3>
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-[10px] font-extrabold uppercase tracking-[0.1em] text-white mb-1">{{ section.settings.col2_title }}</h3>
       {%- for link in section.settings.col2_menu.links -%}
-        <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="text-[11px] font-bold uppercase tracking-wide text-gray-400 no-underline hover:text-white transition-colors leading-relaxed">{{ link.title }}</a>
       {%- endfor -%}
     </div>
-    <div class="footer__col">
-      <h3 class="footer__col-title">{{ section.settings.col3_title }}</h3>
+    <div class="flex flex-col gap-2.5">
+      <h3 class="text-[10px] font-extrabold uppercase tracking-[0.1em] text-white mb-1">{{ section.settings.col3_title }}</h3>
       {%- for link in section.settings.col3_menu.links -%}
-        <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="text-[11px] font-bold uppercase tracking-wide text-gray-400 no-underline hover:text-white transition-colors leading-relaxed">{{ link.title }}</a>
       {%- endfor -%}
     </div>
   </div>
 </footer>
-
-{% stylesheet %}
-  .site-footer {
-    background: #000;
-    color: #fff;
-    padding: 3rem 2rem;
-    margin-top: auto;
-  }
-  .footer__inner {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    max-width: 960px;
-    margin: 0 auto;
-  }
-  .footer__col {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-  }
-  .footer__col-title {
-    font-size: 0.65rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #fff;
-    margin: 0 0 0.25rem;
-  }
-  .footer__link {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #aaa;
-    text-decoration: none;
-    transition: color 0.2s;
-    line-height: 1.6;
-  }
-  .footer__link:hover {
-    color: #fff;
-  }
-  @media (max-width: 640px) {
-    .footer__inner {
-      grid-template-columns: 1fr;
-    }
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

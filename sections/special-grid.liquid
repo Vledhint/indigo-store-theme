@@ -1,34 +1,41 @@
 {%- comment -%}
-  Gender/category landing page. Used for HOMBRE, MUJER, KIDS sections.
-  Shows a full-width hero then a mosaic grid of sub-category tiles.
+  Gender/category landing page — used for HOMBRE, MUJER, KIDS sections.
+  Hero image + configurable mosaic of sub-category tiles.
 {%- endcomment -%}
 
-<section class="gender-hero">
+<section class="relative overflow-hidden w-full">
   {%- if section.settings.hero_image -%}
-    {{ section.settings.hero_image | image_url: width: 1600 | image_tag: loading: 'eager', class: 'gender-hero__img', width: 1600, height: 700 }}
+    {{ section.settings.hero_image | image_url: width: 1600 | image_tag: loading: 'eager', class: 'w-full h-auto max-h-[70vh] object-cover block', width: 1600, height: 700 }}
   {%- else -%}
-    <div class="gender-hero__placeholder">{{ 'lifestyle-2' | placeholder_svg_tag }}</div>
+    <div class="w-full aspect-[16/7] bg-gray-400 flex items-center justify-center">
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full' }}
+    </div>
   {%- endif -%}
-  <div class="gender-hero__overlay">
-    <h1 class="gender-hero__title">{{ section.settings.hero_title }}</h1>
+  <div class="absolute inset-0 flex items-end justify-start px-12 py-10 sm:px-6 sm:py-6 bg-gradient-to-t from-black/45 to-transparent">
+    <h1 class="text-white font-black italic uppercase leading-none tracking-tight text-[clamp(3rem,10vw,8rem)] [text-shadow:0_2px_16px_rgba(0,0,0,0.3)]">
+      {{ section.settings.hero_title }}
+    </h1>
   </div>
 </section>
 
 {%- if section.blocks.size > 0 -%}
-  <div class="category-grid">
+  <div class="category-mosaic grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-rows-[300px] md:auto-rows-[240px] sm:auto-rows-[220px] gap-px bg-gray-200">
     {%- for block in section.blocks -%}
-      <a
-        href="{{ block.settings.link }}"
-        class="category-tile category-tile--{{ block.settings.size }}"
+      <a href="{{ block.settings.link }}"
+        class="category-tile category-tile--{{ block.settings.size }} group relative block overflow-hidden bg-black no-underline"
         {{ block.shopify_attributes }}
       >
         {%- if block.settings.image -%}
-          {{ block.settings.image | image_url: width: 800, height: 960, crop: 'center' | image_tag: loading: 'lazy', width: 800, height: 960, class: 'category-tile__img' }}
+          {{ block.settings.image | image_url: width: 800, height: 960, crop: 'center' | image_tag: loading: 'lazy', width: 800, height: 960, class: 'w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.06] group-hover:opacity-85' }}
         {%- else -%}
-          <div class="category-tile__placeholder">{{ 'collection-1' | placeholder_svg_tag }}</div>
+          <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+            {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full' }}
+          </div>
         {%- endif -%}
-        <div class="category-tile__overlay">
-          <span class="category-tile__label">{{ block.settings.label }}</span>
+        <div class="absolute inset-0 flex items-end justify-start px-6 py-5 bg-gradient-to-t from-black/55 to-transparent">
+          <span class="text-white font-black uppercase italic leading-none tracking-wide text-[clamp(1rem,3vw,1.75rem)]">
+            {{ block.settings.label }}
+          </span>
         </div>
       </a>
     {%- endfor -%}
@@ -36,124 +43,15 @@
 {%- endif -%}
 
 {% stylesheet %}
-  /* Hero */
-  .gender-hero {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-  }
-  .gender-hero__img {
-    width: 100%;
-    height: auto;
-    max-height: 70vh;
-    object-fit: cover;
-    display: block;
-  }
-  .gender-hero__placeholder {
-    width: 100%;
-    aspect-ratio: 16/7;
-    background: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .gender-hero__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    padding: 2.5rem 3rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.45) 30%, transparent 70%);
-  }
-  .gender-hero__title {
-    color: #fff;
-    font-size: clamp(3rem, 10vw, 8rem);
-    font-weight: 900;
-    font-style: italic;
-    text-transform: uppercase;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    text-shadow: 0 2px 16px rgba(0,0,0,0.3);
-  }
-
-  /* Category mosaic grid */
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 300px;
-    gap: 2px;
-  }
-  .category-tile {
-    position: relative;
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    background: #111;
-  }
-  .category-tile--wide {
-    grid-column: span 2;
-  }
-  .category-tile--tall {
-    grid-row: span 2;
-  }
-  .category-tile__img,
-  .category-tile__placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.45s ease, opacity 0.3s ease;
-  }
-  .category-tile__placeholder svg {
-    width: 100%;
-    height: 100%;
-  }
-  .category-tile:hover .category-tile__img {
-    transform: scale(1.06);
-    opacity: 0.85;
-  }
-  .category-tile__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    padding: 1.25rem 1.5rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.55) 30%, transparent 70%);
-  }
-  .category-tile__label {
-    color: #fff;
-    font-size: clamp(1rem, 3vw, 1.75rem);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-style: italic;
-    line-height: 1;
-  }
+  .category-tile--wide { grid-column: span 2; }
+  .category-tile--tall { grid-row: span 2; }
   @media (max-width: 768px) {
-    .category-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 220px;
-    }
-    .category-tile--wide {
-      grid-column: span 2;
-    }
-    .category-tile--tall {
-      grid-row: span 1;
-    }
-    .gender-hero__overlay {
-      padding: 1.5rem;
-    }
+    .category-tile--wide { grid-column: span 2; }
+    .category-tile--tall { grid-row: span 1; }
   }
-  @media (max-width: 480px) {
-    .category-grid {
-      grid-template-columns: 1fr;
-      grid-auto-rows: 220px;
-    }
-    .category-tile--wide {
-      grid-column: span 1;
-    }
+  @media (max-width: 640px) {
+    .category-tile--wide,
+    .category-tile--tall { grid-column: span 1; grid-row: span 1; }
   }
 {% endstylesheet %}
 
@@ -200,8 +98,8 @@
           "label": "Tile size",
           "options": [
             { "value": "normal", "label": "Normal" },
-            { "value": "wide", "label": "Wide (spans 2 columns)" },
-            { "value": "tall", "label": "Tall (spans 2 rows)" }
+            { "value": "wide", "label": "Wide (2 columns)" },
+            { "value": "tall", "label": "Tall (2 rows)" }
           ],
           "default": "normal"
         }

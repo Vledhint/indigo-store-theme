@@ -1,40 +1,41 @@
-<div class="product-page">
-  {%- comment -%} Left: image gallery 2×2 {%- endcomment -%}
-  <div class="product-gallery">
-    {%- assign images = product.images -%}
-    {%- for image in images limit: 4 -%}
-      <div class="product-gallery__item">
-        {{ image | image_url: width: 800, height: 960, crop: 'center' | image_tag: loading: 'eager', width: 800, height: 960, class: 'product-gallery__img' }}
+<div class="grid grid-cols-[1fr_420px] lg:grid-cols-1 min-h-[80vh]">
+
+  {%- comment -%} Left: 2×2 image gallery {%- endcomment -%}
+  <div class="grid grid-cols-2 gap-px bg-gray-200 self-start">
+    {%- for image in product.images limit: 4 -%}
+      <div class="group overflow-hidden aspect-[5/6] bg-gray-100">
+        {{ image | image_url: width: 800, height: 960, crop: 'center' | image_tag: loading: 'eager', width: 800, height: 960, class: 'w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.03]' }}
       </div>
     {%- else -%}
-      <div class="product-gallery__item product-gallery__item--placeholder">
-        {{ 'product-1' | placeholder_svg_tag }}
+      <div class="aspect-[5/6] bg-gray-100 flex items-center justify-center">
+        {{ 'product-1' | placeholder_svg_tag: 'w-full h-full' }}
       </div>
     {%- endfor -%}
   </div>
 
-  {%- comment -%} Right: product info + form {%- endcomment -%}
-  <div class="product-info">
-    <p class="product-info__vendor">{{ product.vendor | upcase }}</p>
-    <h1 class="product-info__title">{{ product.title | upcase }}</h1>
+  {%- comment -%} Right: info panel {%- endcomment -%}
+  <div class="product-info-panel flex flex-col gap-4 px-10 py-8 lg:px-6 lg:py-6 sticky top-20 self-start overflow-y-auto">
 
-    <div class="product-info__price">
-      <span class="product-info__price-amount">{{ product.price | money }}</span>
+    <p class="text-[10px] font-bold tracking-[0.15em] text-gray-400 m-0 uppercase">{{ product.vendor }}</p>
+    <h1 class="text-base font-extrabold tracking-wide leading-tight m-0 uppercase">{{ product.title }}</h1>
+
+    <div class="flex items-baseline gap-3">
+      <span class="text-lg font-bold text-gray-900">{{ product.price | money }}</span>
       {%- if product.compare_at_price > product.price -%}
-        <span class="product-info__price-compare">{{ product.compare_at_price | money }}</span>
+        <span class="text-sm text-gray-400 line-through">{{ product.compare_at_price | money }}</span>
       {%- endif -%}
     </div>
 
-    {%- assign color_option = nil -%}
+    {%- assign color_option_index = nil -%}
     {%- for option in product.options -%}
       {%- if option == 'Color' or option == 'color' or option == 'Colour' -%}
-        {%- assign color_option = option -%}
+        {%- assign color_option_index = forloop.index0 -%}
         {%- assign color_option_pos = forloop.index -%}
       {%- endif -%}
     {%- endfor -%}
 
-    {%- if color_option -%}
-      <div class="product-info__colors">
+    {%- if color_option_index -%}
+      <div class="flex gap-2 flex-wrap">
         {%- assign seen = '' -%}
         {%- for variant in product.variants -%}
           {%- if color_option_pos == 1 -%}{%- assign cv = variant.option1 -%}
@@ -44,12 +45,10 @@
           {%- assign cv_key = '|' | append: cv | append: '|' -%}
           {%- unless seen contains cv_key -%}
             {%- assign seen = seen | append: cv_key -%}
-            <button
-              type="button"
-              class="color-swatch"
+            <button type="button"
+              class="w-7 h-7 rounded-full border-2 border-transparent p-0 cursor-pointer outline outline-1 outline-black/20 outline-offset-0 hover:outline-[#1F3D7C] hover:outline-2 hover:outline-offset-2 transition-all"
               title="{{ cv | escape }}"
-              style="background: {{ cv | downcase | replace: ' ', '' }}"
-              data-color="{{ cv | escape }}"
+              style="background:{{ cv | downcase | replace: ' ', '' }}"
               aria-label="{{ cv | escape }}"
             ></button>
           {%- endunless -%}
@@ -59,18 +58,16 @@
 
     {%- form 'product', product -%}
       {%- assign current_variant = product.selected_or_first_available_variant -%}
-
-      {%- assign size_option = nil -%}
+      {%- assign size_pos = nil -%}
       {%- for option in product.options -%}
         {%- if option == 'Size' or option == 'size' or option == 'Talla' or option == 'talla' -%}
-          {%- assign size_option = option -%}
           {%- assign size_pos = forloop.index -%}
         {%- endif -%}
       {%- endfor -%}
 
-      {%- if size_option -%}
-        <div class="product-form__sizes">
-          <select name="id" id="product-variant-{{ section.id }}" class="product-form__size-select" aria-label="{{ 'products.size' | t }}">
+      {%- if size_pos -%}
+        <div class="relative">
+          <select name="id" class="w-full appearance-none bg-[#1F3D7C] text-white border-none py-3.5 pl-4 pr-10 text-xs font-bold uppercase tracking-[0.1em] cursor-pointer font-[inherit]" aria-label="{{ 'products.size' | t }}">
             {%- for variant in product.variants -%}
               <option value="{{ variant.id }}"
                 {%- if variant == current_variant %} selected{% endif %}
@@ -82,16 +79,18 @@
               </option>
             {%- endfor -%}
           </select>
-          <svg class="product-form__size-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
       {%- else -%}
         <input type="hidden" name="id" value="{{ current_variant.id }}">
       {%- endif -%}
 
-      <a href="#" class="product-form__size-guide">{{ 'products.size_guide' | t }}</a>
+      <a href="#" class="self-center text-[11px] font-semibold uppercase tracking-wide text-gray-500 underline underline-offset-2 hover:text-gray-800 transition-colors">
+        {{- 'products.size_guide' | t -}}
+      </a>
 
-      <div class="product-form__actions">
-        <button type="submit" name="add" class="product-form__btn product-form__btn--cart">
+      <div class="flex flex-col gap-2">
+        <button type="submit" name="add" class="w-full py-3.5 text-xs font-extrabold uppercase tracking-[0.12em] border-2 border-[#1F3D7C] bg-white text-[#1F3D7C] cursor-pointer font-[inherit] hover:bg-gray-50 transition-colors">
           {{- 'products.add_to_cart' | t -}}
         </button>
         {{ form | payment_button }}
@@ -99,262 +98,48 @@
     {%- endform -%}
 
     {%- if product.description != blank -%}
-      <details class="product-accordion">
-        <summary class="product-accordion__trigger">
+      <details class="border-t border-gray-200 product-accordion">
+        <summary class="flex items-center justify-between py-3.5 text-[11px] font-bold uppercase tracking-[0.1em] cursor-pointer select-none list-none">
           <span>{{ 'products.description' | t }}</span>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="w-4 h-4 shrink-0 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </summary>
-        <div class="product-accordion__body">{{ product.description }}</div>
+        <div class="pb-4 text-sm text-gray-600 leading-relaxed">{{ product.description }}</div>
       </details>
     {%- endif -%}
 
-    <details class="product-accordion">
-      <summary class="product-accordion__trigger">
-        <span>{{ 'products.shipping_returns' | t }}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <div class="product-accordion__body">{{ section.settings.shipping_text }}</div>
-    </details>
+    {%- assign accordions = 'products.shipping_returns,products.care,products.legals' | split: ',' -%}
+    {%- assign accordion_texts = section.settings.shipping_text | append: '||' | append: section.settings.care_text | append: '||' | append: section.settings.legal_text | split: '||' -%}
 
-    <details class="product-accordion">
-      <summary class="product-accordion__trigger">
-        <span>{{ 'products.care' | t }}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <div class="product-accordion__body">{{ section.settings.care_text }}</div>
-    </details>
+    {%- for label in accordions -%}
+      <details class="border-t border-gray-200 product-accordion{% if forloop.last %} border-b{% endif %}">
+        <summary class="flex items-center justify-between py-3.5 text-[11px] font-bold uppercase tracking-[0.1em] cursor-pointer select-none list-none">
+          <span>{{ label | t }}</span>
+          <svg class="w-4 h-4 shrink-0 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="pb-4 text-sm text-gray-600 leading-relaxed">{{ accordion_texts[forloop.index0] }}</div>
+      </details>
+    {%- endfor -%}
 
-    <details class="product-accordion">
-      <summary class="product-accordion__trigger">
-        <span>{{ 'products.legals' | t }}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <div class="product-accordion__body">{{ section.settings.legal_text }}</div>
-    </details>
   </div>
 </div>
 
 {% stylesheet %}
-  .product-page {
-    display: grid;
-    grid-template-columns: 1fr 420px;
-    gap: 0;
-    min-height: 80vh;
-  }
-  /* Gallery */
-  .product-gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2px;
-    background: #e8e8e8;
-    align-self: start;
-  }
-  .product-gallery__item {
-    overflow: hidden;
-    aspect-ratio: 5/6;
-    background: #f0f0f0;
-  }
-  .product-gallery__item--placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .product-gallery__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-  .product-gallery__item:hover .product-gallery__img {
-    transform: scale(1.03);
-  }
-  /* Info panel */
-  .product-info {
-    padding: 2rem 2rem 2rem 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    position: sticky;
-    top: 5rem;
-    align-self: start;
+  .product-info-panel {
     max-height: calc(100vh - 5rem);
-    overflow-y: auto;
   }
-  .product-info__vendor {
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: #888;
-    margin: 0;
+  @media (max-width: 1024px) {
+    .product-info-panel {
+      position: static;
+      max-height: none;
+    }
   }
-  .product-info__title {
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    line-height: 1.3;
-    margin: 0;
-  }
-  .product-info__price {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-  }
-  .product-info__price-amount {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #111;
-  }
-  .product-info__price-compare {
-    font-size: 0.875rem;
-    color: #999;
-    text-decoration: line-through;
-  }
-  /* Color swatches */
-  .product-info__colors {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  .color-swatch {
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: border-color 0.15s;
-    padding: 0;
-    outline: 1px solid rgba(0,0,0,0.15);
-    outline-offset: 0;
-  }
-  .color-swatch:hover,
-  .color-swatch.is-active {
-    outline-color: #1F3D7C;
-    outline-width: 2px;
-    outline-offset: 2px;
-  }
-  /* Size selector */
-  .product-form__sizes {
-    position: relative;
-  }
-  .product-form__size-select {
-    width: 100%;
-    appearance: none;
-    background: #1F3D7C;
-    color: #fff;
-    border: none;
-    padding: 0.875rem 2.5rem 0.875rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .product-form__size-chevron {
-    position: absolute;
-    right: 0.875rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
-    pointer-events: none;
-    color: #fff;
-  }
-  .product-form__size-guide {
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #666;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    align-self: center;
-  }
-  /* Form actions */
-  .product-form__actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .product-form__btn {
-    width: 100%;
-    padding: 0.875rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    border: 2px solid #1F3D7C;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s, color 0.15s;
-  }
-  .product-form__btn--cart {
-    background: #fff;
-    color: #1F3D7C;
-  }
-  .product-form__btn--cart:hover {
-    background: #f0f0f0;
-  }
-  /* Shopify payment button override */
-  .product-form__actions .shopify-payment-button__button {
+  details.product-accordion summary::-webkit-details-marker { display: none; }
+  details[open].product-accordion > summary svg { transform: rotate(180deg); }
+  .shopify-payment-button__button {
     border-radius: 0 !important;
     font-weight: 800 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
-  }
-  /* Accordion */
-  .product-accordion {
-    border-top: 1px solid #e0e0e0;
-  }
-  .product-accordion:last-child {
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .product-accordion__trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.875rem 0;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-  }
-  .product-accordion__trigger::-webkit-details-marker {
-    display: none;
-  }
-  .product-accordion__trigger svg {
-    width: 1rem;
-    height: 1rem;
-    flex-shrink: 0;
-    transition: transform 0.2s;
-  }
-  details[open] .product-accordion__trigger svg {
-    transform: rotate(180deg);
-  }
-  .product-accordion__body {
-    padding: 0 0 1rem;
-    font-size: 0.8rem;
-    color: #555;
-    line-height: 1.6;
-  }
-  @media (max-width: 1024px) {
-    .product-page {
-      grid-template-columns: 1fr;
-    }
-    .product-info {
-      position: static;
-      max-height: none;
-      padding: 1.5rem;
-    }
-  }
-  @media (max-width: 768px) {
-    .product-gallery {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    letter-spacing: 0.12em !important;
   }
 {% endstylesheet %}
 

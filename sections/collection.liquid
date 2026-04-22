@@ -1,22 +1,22 @@
 {%- render 'ticker', text: collection.title, theme: 'dark' -%}
 
-<div class="collection-filters">
-  <span class="collection-filters__label">{{ 'collections.filters' | t }}</span>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+<div class="flex items-center gap-2 px-8 py-4 border-b border-gray-200 text-xs font-bold uppercase tracking-[0.08em] cursor-pointer sm:px-4">
+  <span>{{ 'collections.filters' | t }}</span>
+  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
 </div>
 
-<div class="collection-page">
+<div class="px-8 pt-6 pb-12 max-w-[1300px] mx-auto sm:px-4">
   {%- paginate collection.products by 12 -%}
-    <div class="collection-grid">
+    <div class="grid grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-5 sm:gap-3">
       {%- for product in collection.products -%}
         {%- render 'product-card', product: product -%}
       {%- else -%}
-        <p class="collection-empty">{{ 'collections.empty' | t }}</p>
+        <p class="col-span-4 text-center py-12 text-sm text-gray-500">{{ 'collections.empty' | t }}</p>
       {%- endfor -%}
     </div>
 
     {%- if paginate.pages > 1 -%}
-      <div class="collection-pagination">
+      <div class="collection-pagination flex justify-center gap-2 mt-12 pt-8 border-t border-gray-200">
         {{ paginate | default_pagination }}
       </div>
     {%- endif -%}
@@ -24,54 +24,14 @@
 </div>
 
 {% stylesheet %}
-  .collection-filters {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #e8e8e8;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-  }
-  .collection-filters svg {
-    width: 1rem;
-    height: 1rem;
-  }
-  .collection-page {
-    padding: 1.5rem 2rem 3rem;
-    max-width: 1300px;
-    margin: 0 auto;
-  }
-  .collection-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-  }
-  .collection-empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3rem;
-    font-size: 0.875rem;
-    color: #666;
-  }
-  .collection-pagination {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e8e8e8;
-  }
   .collection-pagination a,
   .collection-pagination span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
+    min-width: 2rem;
     height: 2rem;
+    padding: 0 0.25rem;
     font-size: 0.75rem;
     font-weight: 700;
     text-decoration: none;
@@ -83,20 +43,6 @@
   .collection-pagination a:hover {
     background: #1F3D7C;
     color: #fff;
-  }
-  @media (max-width: 1024px) {
-    .collection-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  @media (max-width: 768px) {
-    .collection-page {
-      padding: 1rem 1rem 2rem;
-    }
-    .collection-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-    }
   }
 {% endstylesheet %}
 

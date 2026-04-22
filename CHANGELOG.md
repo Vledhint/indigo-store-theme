@@ -21,3 +21,22 @@ All notable changes to the Indigo Store theme are documented here.
 - `locales/en.default.json` — added translation keys for cart totals, product actions, customer auth, and section labels
 - `assets/critical.css` — added CSS reset, global button system, layout utilities
 - `config/settings_schema.json` — changed default font from `work_sans_n4` to `montserrat_n4`
+
+### Refactored — 2026-04-21 (Tailwind CSS migration)
+- `snippets/ticker.liquid` — replaced custom stylesheet with Tailwind classes; kept only keyframe animation and hover-pause in `{% stylesheet %}`
+- `snippets/product-card.liquid` — fully replaced custom CSS with Tailwind utilities; image hover scale uses `group`/`group-hover` pattern
+- `sections/header.liquid` — replaced all custom CSS with Tailwind; sticky positioning, flex layout, cart badge, and icon sizing via utilities
+- `sections/footer.liquid` — removed `{% stylesheet %}` entirely; 3-col responsive grid via `grid-cols-3 sm:grid-cols-1`
+- `sections/home.liquid` — removed `{% stylesheet %}` entirely; all layout, spacing, typography, and responsive breakpoints via Tailwind; `clamp()` font sizes via arbitrary values
+- `sections/collection.liquid` — replaced custom CSS with Tailwind; kept only `{% stylesheet %}` for Shopify-generated pagination HTML
+- `sections/product.liquid` — replaced custom CSS with Tailwind; kept `{% stylesheet %}` for `details/summary` marker reset, sticky panel height calc, and Shopify payment button overrides
+- `sections/cart.liquid` — replaced custom CSS with Tailwind; removed separate qty-control stylesheet, inline Tailwind on all elements
+- `sections/special-grid.liquid` — replaced custom CSS with Tailwind; kept only `{% stylesheet %}` for dynamic `grid-column/grid-row span` classes (Liquid-interpolated values not scannable by Tailwind)
+
+**Responsive breakpoints applied across all sections:**
+
+| Breakpoint | Width | Usage |
+|---|---|---|
+| `lg:` | ≤ 1024px | Product page stacks, 3-col grids |
+| `md:` | ≤ 768px | 2-col grids, category mosaic |
+| `sm:` | ≤ 640px | 1-col footer/sale, 2-col products, reduced padding |

@@ -1,33 +1,37 @@
 {%- comment -%} ── Hero ── {%- endcomment -%}
-<section class="home-hero">
+<section class="relative w-full overflow-hidden">
   {%- if section.settings.hero_image -%}
-    {{ section.settings.hero_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'home-hero__img', width: 2000, height: 900 }}
+    {{ section.settings.hero_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'w-full h-auto block max-h-[90vh] object-cover', width: 2000, height: 900 }}
   {%- else -%}
-    <div class="home-hero__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'home-hero__svg' }}</div>
+    <div class="w-full aspect-[16/7] bg-gray-300 flex items-center justify-center">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full' }}
+    </div>
   {%- endif -%}
-  <div class="home-hero__overlay">
-    <h1 class="home-hero__title">{{ section.settings.hero_text }}</h1>
+  <div class="absolute inset-0 flex items-center justify-center bg-black/10">
+    <h1 class="text-white font-black uppercase italic text-center leading-none tracking-tight text-[clamp(3rem,10vw,9rem)] [text-shadow:0_2px_20px_rgba(0,0,0,0.4)]">
+      {{ section.settings.hero_text }}
+    </h1>
   </div>
 </section>
 
 {%- comment -%} ── Features bar ── {%- endcomment -%}
-<section class="features-bar">
-  <div class="features-bar__grid">
-    <div class="feature">
-      <span class="feature__label">{{ section.settings.feature_1_label }}</span>
-      <span class="feature__value">{{ section.settings.feature_1_text }}</span>
+<section class="bg-[#1F3D7C] py-6 px-8">
+  <div class="grid grid-cols-4 sm:grid-cols-2 gap-4 max-w-[960px] mx-auto">
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_1_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_1_text }}</span>
     </div>
-    <div class="feature">
-      <span class="feature__label">{{ section.settings.feature_2_label }}</span>
-      <span class="feature__value">{{ section.settings.feature_2_text }}</span>
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_2_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_2_text }}</span>
     </div>
-    <div class="feature">
-      <span class="feature__label">{{ section.settings.feature_3_label }}</span>
-      <span class="feature__value">{{ section.settings.feature_3_text }}</span>
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_3_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_3_text }}</span>
     </div>
-    <div class="feature">
-      <span class="feature__label">{{ section.settings.feature_4_label }}</span>
-      <span class="feature__value">{{ section.settings.feature_4_text }}</span>
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_4_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_4_text }}</span>
     </div>
   </div>
 </section>
@@ -35,8 +39,8 @@
 {%- comment -%} ── Men's section ── {%- endcomment -%}
 {%- unless section.settings.men_collection == blank -%}
   {%- render 'ticker', text: section.settings.men_ticker_text, theme: 'dark' -%}
-  <section class="home-products">
-    <div class="home-products__grid">
+  <section class="px-8 py-8 sm:px-4 sm:py-5">
+    <div class="grid grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3 max-w-[1200px] mx-auto">
       {%- for product in section.settings.men_collection.products limit: 4 -%}
         {%- render 'product-card', product: product -%}
       {%- endfor -%}
@@ -45,20 +49,24 @@
 {%- endunless -%}
 
 {%- comment -%} ── Tagline ── {%- endcomment -%}
-<section class="home-tagline">
+<section class="relative overflow-hidden">
   {%- if section.settings.tagline_image -%}
-    {{ section.settings.tagline_image | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'home-tagline__img', width: 1600, height: 700 }}
+    {{ section.settings.tagline_image | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'w-full h-auto max-h-[500px] object-cover block', width: 1600, height: 700 }}
+  {%- else -%}
+    <div class="w-full aspect-[16/7] bg-gray-400"></div>
   {%- endif -%}
-  <div class="home-tagline__overlay">
-    <p class="home-tagline__text">{{ section.settings.tagline_text }}</p>
+  <div class="absolute inset-0 flex items-center justify-center bg-black/35 px-8">
+    <p class="text-white font-black italic text-center leading-tight max-w-[900px] text-[clamp(1.5rem,4vw,3.5rem)]">
+      {{ section.settings.tagline_text }}
+    </p>
   </div>
 </section>
 
 {%- comment -%} ── Women's section ── {%- endcomment -%}
 {%- unless section.settings.women_collection == blank -%}
   {%- render 'ticker', text: section.settings.women_ticker_text, theme: 'dark' -%}
-  <section class="home-products">
-    <div class="home-products__grid">
+  <section class="px-8 py-8 sm:px-4 sm:py-5">
+    <div class="grid grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3 max-w-[1200px] mx-auto">
       {%- for product in section.settings.women_collection.products limit: 4 -%}
         {%- render 'product-card', product: product -%}
       {%- endfor -%}
@@ -69,8 +77,8 @@
 {%- comment -%} ── Kids' section ── {%- endcomment -%}
 {%- unless section.settings.kids_collection == blank -%}
   {%- render 'ticker', text: section.settings.kids_ticker_text, theme: 'dark' -%}
-  <section class="home-products">
-    <div class="home-products__grid">
+  <section class="px-8 py-8 sm:px-4 sm:py-5">
+    <div class="grid grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3 max-w-[1200px] mx-auto">
       {%- for product in section.settings.kids_collection.products limit: 4 -%}
         {%- render 'product-card', product: product -%}
       {%- endfor -%}
@@ -80,237 +88,28 @@
 
 {%- comment -%} ── Sale / Rebajas ── {%- endcomment -%}
 {%- unless section.settings.sale_collection == blank -%}
-  <section class="home-sale">
-    <div class="home-sale__left">
-      <h2 class="home-sale__title">{{ section.settings.sale_title }}</h2>
-      <a href="{{ section.settings.sale_collection.url }}" class="home-sale__cta">
+  <section class="bg-[#1F3D7C] grid grid-cols-2 sm:grid-cols-1 min-h-[480px]">
+    <div class="flex flex-col items-start justify-center p-12 md:p-8 sm:p-6 gap-6">
+      <h2 class="font-black italic uppercase text-white leading-none tracking-tight text-[clamp(4rem,10vw,8rem)]">
+        {{ section.settings.sale_title }}
+      </h2>
+      <a href="{{ section.settings.sale_collection.url }}" class="inline-flex items-center justify-center px-8 py-3 bg-white text-[#1F3D7C] text-xs font-extrabold uppercase tracking-[0.12em] no-underline hover:bg-gray-100 transition-colors">
         {{- 'sections.home.sale_cta' | t -}}
       </a>
     </div>
-    <div class="home-sale__grid">
+    <div class="grid grid-cols-2">
       {%- for product in section.settings.sale_collection.products limit: 4 -%}
-        <a href="{{ product.url }}" class="home-sale__item">
+        <a href="{{ product.url }}" class="group block overflow-hidden aspect-square">
           {%- if product.featured_image -%}
-            {{ product.featured_image | image_url: width: 400, height: 480, crop: 'center' | image_tag: loading: 'lazy', width: 400, height: 480 }}
+            {{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' | image_tag: loading: 'lazy', width: 400, height: 400, class: 'w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.04]' }}
           {%- else -%}
-            {{ 'product' | placeholder_svg_tag }}
+            {{ 'product' | placeholder_svg_tag: 'w-full h-full object-cover' }}
           {%- endif -%}
         </a>
       {%- endfor -%}
     </div>
   </section>
 {%- endunless -%}
-
-{% stylesheet %}
-  /* Hero */
-  .home-hero {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
-  .home-hero__img {
-    width: 100%;
-    height: auto;
-    display: block;
-    max-height: 90vh;
-    object-fit: cover;
-  }
-  .home-hero__placeholder {
-    width: 100%;
-    aspect-ratio: 16/7;
-    background: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .home-hero__svg {
-    width: 100%;
-    height: 100%;
-  }
-  .home-hero__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.1);
-  }
-  .home-hero__title {
-    color: #fff;
-    font-size: clamp(3rem, 10vw, 9rem);
-    font-weight: 900;
-    text-transform: uppercase;
-    font-style: italic;
-    text-align: center;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
-  }
-
-  /* Features bar */
-  .features-bar {
-    background: #1F3D7C;
-    padding: 1.5rem 2rem;
-  }
-  .features-bar__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    max-width: 960px;
-    margin: 0 auto;
-  }
-  .feature {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    color: #fff;
-    gap: 0.25rem;
-  }
-  .feature__label {
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    opacity: 0.8;
-  }
-  .feature__value {
-    font-size: 0.875rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  /* Products grid */
-  .home-products {
-    padding: 2rem;
-  }
-  .home-products__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  /* Tagline */
-  .home-tagline {
-    position: relative;
-    overflow: hidden;
-  }
-  .home-tagline__img {
-    width: 100%;
-    height: auto;
-    max-height: 500px;
-    object-fit: cover;
-    display: block;
-  }
-  .home-tagline__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.35);
-  }
-  .home-tagline__text {
-    color: #fff;
-    font-size: clamp(1.5rem, 4vw, 3.5rem);
-    font-weight: 900;
-    font-style: italic;
-    text-align: center;
-    letter-spacing: -0.01em;
-    line-height: 1.15;
-    padding: 1rem 2rem;
-    max-width: 900px;
-  }
-
-  /* Sale / Rebajas */
-  .home-sale {
-    background: #1F3D7C;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 480px;
-  }
-  .home-sale__left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 3rem 2.5rem;
-    gap: 1.5rem;
-  }
-  .home-sale__title {
-    font-size: clamp(4rem, 10vw, 8rem);
-    font-weight: 900;
-    font-style: italic;
-    text-transform: uppercase;
-    color: #fff;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .home-sale__cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 2rem;
-    background: #fff;
-    color: #1F3D7C;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s;
-  }
-  .home-sale__cta:hover {
-    background: #e8e8e8;
-  }
-  .home-sale__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-  }
-  .home-sale__item {
-    display: block;
-    overflow: hidden;
-    aspect-ratio: 1;
-  }
-  .home-sale__item img,
-  .home-sale__item svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-  .home-sale__item:hover img {
-    transform: scale(1.04);
-  }
-
-  @media (max-width: 1024px) {
-    .home-products__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 768px) {
-    .features-bar__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .home-sale {
-      grid-template-columns: 1fr;
-    }
-    .home-products {
-      padding: 1.25rem;
-    }
-  }
-  @media (max-width: 480px) {
-    .home-products__grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-    }
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

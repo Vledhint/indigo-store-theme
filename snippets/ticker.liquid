@@ -11,64 +11,27 @@
 
 {%- assign ticker_theme = theme | default: 'dark' -%}
 
-<div class="ticker ticker--{{ ticker_theme }}">
-  <div class="ticker__track">
-    <ul class="ticker__list">
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
-      <li class="ticker__item">{{ text }}</li>
-      <li class="ticker__sep">&middot;</li>
+{%- if ticker_theme == 'blue' -%}
+  <div class="overflow-hidden py-3 bg-[#1F3D7C] text-white">
+{%- else -%}
+  <div class="overflow-hidden py-3 bg-black text-white">
+{%- endif -%}
+  <div class="ticker-track flex" data-ticker>
+    <ul class="ticker-list flex list-none p-0 m-0 shrink-0 whitespace-nowrap">
+      {%- for i in (1..8) -%}
+        <li class="text-lg font-bold uppercase tracking-wide px-4">{{ text }}</li>
+        <li class="text-lg font-bold uppercase px-4">&middot;</li>
+      {%- endfor -%}
     </ul>
   </div>
 </div>
 
 {% stylesheet %}
-  .ticker {
-    overflow: hidden;
-    padding: 0.75rem 0;
-  }
-  .ticker--dark {
-    background: #000;
-    color: #fff;
-  }
-  .ticker--blue {
-    background: #1F3D7C;
-    color: #fff;
-  }
-  .ticker__track {
-    display: flex;
-  }
-  .ticker__list {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .ticker-list {
     animation: indigo-ticker var(--ticker-speed, 20s) linear infinite;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
-  .ticker__track:hover .ticker__list {
+  .ticker-track:hover .ticker-list {
     animation-play-state: paused;
-  }
-  .ticker__item,
-  .ticker__sep {
-    font-size: 1.125rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0 1rem;
   }
   @keyframes indigo-ticker {
     from { transform: translateX(0); }
@@ -78,9 +41,9 @@
 
 {% javascript %}
   (function () {
-    document.querySelectorAll('.ticker__track:not([data-init])').forEach(function (track) {
-      track.setAttribute('data-init', '');
-      var list = track.querySelector('.ticker__list');
+    document.querySelectorAll('[data-ticker]:not([data-ticker-init])').forEach(function (track) {
+      track.setAttribute('data-ticker-init', '');
+      var list = track.querySelector('.ticker-list');
       if (!list) return;
       var clone = list.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
