@@ -1,168 +1,468 @@
+{%- comment -%} ── Hero ── {%- endcomment -%}
+<section class="home-hero">
+  {%- if section.settings.hero_image -%}
+    {{ section.settings.hero_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'home-hero__img', width: 2000, height: 900 }}
+  {%- else -%}
+    <div class="home-hero__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'home-hero__svg' }}</div>
+  {%- endif -%}
+  <div class="home-hero__overlay">
+    <h1 class="home-hero__title">{{ section.settings.hero_text }}</h1>
+  </div>
+</section>
 
-{% comment %}
-  Welcome to Shopify theme development!
-{% endcomment %}
-
-<section id="hero-section">
-  <div class="hero-container w-full">
-    <div class="hero-content relative">
-      <img class="w-full h-auto" src="{{'demo-image-3.webp' | asset_url }}" alt="hero-image" width="1200" height="801" />
-      <h1 class="absolute uppercase text-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-5xl sm:text-[120px]">No Rules, <br>Just <strong>Denim</strong></h1>
+{%- comment -%} ── Features bar ── {%- endcomment -%}
+<section class="features-bar">
+  <div class="features-bar__grid">
+    <div class="feature">
+      <span class="feature__label">{{ section.settings.feature_1_label }}</span>
+      <span class="feature__value">{{ section.settings.feature_1_text }}</span>
+    </div>
+    <div class="feature">
+      <span class="feature__label">{{ section.settings.feature_2_label }}</span>
+      <span class="feature__value">{{ section.settings.feature_2_text }}</span>
+    </div>
+    <div class="feature">
+      <span class="feature__label">{{ section.settings.feature_3_label }}</span>
+      <span class="feature__value">{{ section.settings.feature_3_text }}</span>
+    </div>
+    <div class="feature">
+      <span class="feature__label">{{ section.settings.feature_4_label }}</span>
+      <span class="feature__value">{{ section.settings.feature_4_text }}</span>
     </div>
   </div>
 </section>
 
-<section id="issues-section">
-  <div class="issues bg-[#1F3D7C] px-2 py-8 w-full">
-    <div class="issues-grid grid grid-cols-4 gap-8 w-full sm:w-2/3 mx-auto">
-      <div class="text-white text-center">
-        <h3 class="text-xs uppercase">Lavado</h3>
-        <p class="highlight-description">Eco Friendly</p>
-      </div>
+{%- comment -%} ── Men's section ── {%- endcomment -%}
+{%- unless section.settings.men_collection == blank -%}
+  {%- render 'ticker', text: section.settings.men_ticker_text, theme: 'dark' -%}
+  <section class="home-products">
+    <div class="home-products__grid">
+      {%- for product in section.settings.men_collection.products limit: 4 -%}
+        {%- render 'product-card', product: product -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endunless -%}
 
-      <div class="text-white text-center">
-        <h3 class="text-xs uppercase">Telas</h3>
-        <p class="highlight-description">Duraderas</p>
-      </div>
-
-      <div class="text-white text-center">
-        <h3 class="text-xs uppercase">Costuras</h3>
-        <p class="highlight-description">Resistentes</p>
-      </div>
-
-      <div class="text-white text-center">
-        <h3 class="text-xs uppercase">Fit</h3>
-        <p class="highlight-description">Ajustables</p>
-      </div>
-    </div> 
+{%- comment -%} ── Tagline ── {%- endcomment -%}
+<section class="home-tagline">
+  {%- if section.settings.tagline_image -%}
+    {{ section.settings.tagline_image | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'home-tagline__img', width: 1600, height: 700 }}
+  {%- endif -%}
+  <div class="home-tagline__overlay">
+    <p class="home-tagline__text">{{ section.settings.tagline_text }}</p>
   </div>
 </section>
-{%-  liquid
-  assign grid = section.settings.per_row
--%}
-<section id="banner">
-  <div class="banner-container w-full bg-black text-white overflow-hidden">
-    <div class="banner-track flex w-full" aria-hidden="true">
-      <ul class="banner-list flex list-none text-2xl uppercase py-4 w-auto">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'ticker_item' -%}
-            <li class="whitespace-nowrap px-8 px-2 text-2xl uppercase">
-              {{- block.settings.text -}}
-            </li>
-            <li class="whitespace-nowrap text-2xl uppercase">&middot;</li>
+
+{%- comment -%} ── Women's section ── {%- endcomment -%}
+{%- unless section.settings.women_collection == blank -%}
+  {%- render 'ticker', text: section.settings.women_ticker_text, theme: 'dark' -%}
+  <section class="home-products">
+    <div class="home-products__grid">
+      {%- for product in section.settings.women_collection.products limit: 4 -%}
+        {%- render 'product-card', product: product -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endunless -%}
+
+{%- comment -%} ── Kids' section ── {%- endcomment -%}
+{%- unless section.settings.kids_collection == blank -%}
+  {%- render 'ticker', text: section.settings.kids_ticker_text, theme: 'dark' -%}
+  <section class="home-products">
+    <div class="home-products__grid">
+      {%- for product in section.settings.kids_collection.products limit: 4 -%}
+        {%- render 'product-card', product: product -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endunless -%}
+
+{%- comment -%} ── Sale / Rebajas ── {%- endcomment -%}
+{%- unless section.settings.sale_collection == blank -%}
+  <section class="home-sale">
+    <div class="home-sale__left">
+      <h2 class="home-sale__title">{{ section.settings.sale_title }}</h2>
+      <a href="{{ section.settings.sale_collection.url }}" class="home-sale__cta">
+        {{- 'sections.home.sale_cta' | t -}}
+      </a>
+    </div>
+    <div class="home-sale__grid">
+      {%- for product in section.settings.sale_collection.products limit: 4 -%}
+        <a href="{{ product.url }}" class="home-sale__item">
+          {%- if product.featured_image -%}
+            {{ product.featured_image | image_url: width: 400, height: 480, crop: 'center' | image_tag: loading: 'lazy', width: 400, height: 480 }}
+          {%- else -%}
+            {{ 'product' | placeholder_svg_tag }}
           {%- endif -%}
-        {%- endfor -%}
-      </ul>
+        </a>
+      {%- endfor -%}
     </div>
-  </div>
-</section>
-
-<section id="collections-section">
-  {%  unless section.settings.product_list == empty %}
-    <div class="collections-container w-full py-8">
-      <div class="collections-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full sm:w-4/5 mx-auto">
-        {% for product in section.settings.product_list %}
-          <a href="{{ product.url }}" class="block">
-            {% if product.featured_image %}
-              <img src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}" alt="{{ product.title }}" class="w-full h-auto mb-4" width="500" height="600" />
-            {% endif %}
-            <h3 class="text-lg text-center">{{ product.title }}</h3>
-          </a>
-        {% endfor %}
-      </div>
-    </div>
-    
-  {% endunless %}
-</section>
-
+  </section>
+{%- endunless -%}
 
 {% stylesheet %}
-  .highlight-description {
+  /* Hero */
+  .home-hero {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  .home-hero__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 90vh;
+    object-fit: cover;
+  }
+  .home-hero__placeholder {
+    width: 100%;
+    aspect-ratio: 16/7;
+    background: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home-hero__svg {
+    width: 100%;
+    height: 100%;
+  }
+  .home-hero__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.1);
+  }
+  .home-hero__title {
+    color: #fff;
+    font-size: clamp(3rem, 10vw, 9rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    text-align: center;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
   }
 
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-100%); }
+  /* Features bar */
+  .features-bar {
+    background: #1F3D7C;
+    padding: 1.5rem 2rem;
+  }
+  .features-bar__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    gap: 0.25rem;
+  }
+  .feature__label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.8;
+  }
+  .feature__value {
+    font-size: 0.875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
-  .banner-list {
-    animation: ticker var(--ticker-speed, 20s) linear infinite;
+  /* Products grid */
+  .home-products {
+    padding: 2rem;
+  }
+  .home-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  .banner-track:hover .banner-list {
-    animation-play-state: paused;
+  /* Tagline */
+  .home-tagline {
+    position: relative;
+    overflow: hidden;
+  }
+  .home-tagline__img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    display: block;
+  }
+  .home-tagline__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.35);
+  }
+  .home-tagline__text {
+    color: #fff;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    font-weight: 900;
+    font-style: italic;
+    text-align: center;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    padding: 1rem 2rem;
+    max-width: 900px;
+  }
+
+  /* Sale / Rebajas */
+  .home-sale {
+    background: #1F3D7C;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 480px;
+  }
+  .home-sale__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 2.5rem;
+    gap: 1.5rem;
+  }
+  .home-sale__title {
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .home-sale__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2rem;
+    background: #fff;
+    color: #1F3D7C;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .home-sale__cta:hover {
+    background: #e8e8e8;
+  }
+  .home-sale__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  .home-sale__item {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+  .home-sale__item img,
+  .home-sale__item svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .home-sale__item:hover img {
+    transform: scale(1.04);
+  }
+
+  @media (max-width: 1024px) {
+    .home-products__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .features-bar__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .home-sale {
+      grid-template-columns: 1fr;
+    }
+    .home-products {
+      padding: 1.25rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .home-products__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
   }
 {% endstylesheet %}
-
-{% javascript %}
-  (function () {
-    const track = document.querySelector('.banner-track');
-    if (!track) return;
-
-    const list = track.querySelector('.banner-list');
-    const clone = list.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');
-    track.appendChild(clone);
-
-    const itemCount = list.querySelectorAll('li').length;
-    const speed = Math.max(1, itemCount * 5);
-    list.style.setProperty('--ticker-speed', speed + 's');
-    clone.style.setProperty('--ticker-speed', speed + 's');
-  })();
-{% endjavascript %}
 
 {% schema %}
 {
   "name": "Home",
   "settings": [
     {
-      "type": "product_list",
-      "id": "product_list",
-      "label": "Products de Hombre"
+      "type": "header",
+      "content": "Hero"
     },
     {
-      "type": "range",
-      "id": "per_row",
-      "min": 2,
-      "max": 4,
-      "step": 1,
-      "label": "Products per row",
-      "default": 4
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
     },
     {
-      "type": "range",
-      "id": "limit",
-      "min": 2,
-      "max": 6,
-      "step": 1,
-      "label": "Products shown",
-      "default": 4
-    }
-  ],
-  "blocks": [
+      "type": "text",
+      "id": "hero_text",
+      "label": "Hero text",
+      "default": "No Rules, Just Denim"
+    },
     {
-      "type": "ticker_item",
-      "name": "Ticker item",
-      "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Text",
-          "default": "New item"
-        }
-      ]
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_label",
+      "label": "Feature 1 label",
+      "default": "Lavado"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_text",
+      "label": "Feature 1 value",
+      "default": "Eco Friendly"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_label",
+      "label": "Feature 2 label",
+      "default": "Telas"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_text",
+      "label": "Feature 2 value",
+      "default": "Duraderas"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_label",
+      "label": "Feature 3 label",
+      "default": "Costuras"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_text",
+      "label": "Feature 3 value",
+      "default": "Resistentes"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_label",
+      "label": "Feature 4 label",
+      "default": "Fit"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_text",
+      "label": "Feature 4 value",
+      "default": "Ajustables"
+    },
+    {
+      "type": "header",
+      "content": "Men's section"
+    },
+    {
+      "type": "text",
+      "id": "men_ticker_text",
+      "label": "Men's ticker text",
+      "default": "HOMBRE"
+    },
+    {
+      "type": "collection",
+      "id": "men_collection",
+      "label": "Men's collection"
+    },
+    {
+      "type": "header",
+      "content": "Tagline"
+    },
+    {
+      "type": "image_picker",
+      "id": "tagline_image",
+      "label": "Tagline background image"
+    },
+    {
+      "type": "text",
+      "id": "tagline_text",
+      "label": "Tagline",
+      "default": "Everyday denim. Every version of you"
+    },
+    {
+      "type": "header",
+      "content": "Women's section"
+    },
+    {
+      "type": "text",
+      "id": "women_ticker_text",
+      "label": "Women's ticker text",
+      "default": "MUJER"
+    },
+    {
+      "type": "collection",
+      "id": "women_collection",
+      "label": "Women's collection"
+    },
+    {
+      "type": "header",
+      "content": "Kids' section"
+    },
+    {
+      "type": "text",
+      "id": "kids_ticker_text",
+      "label": "Kids' ticker text",
+      "default": "KIDS"
+    },
+    {
+      "type": "collection",
+      "id": "kids_collection",
+      "label": "Kids' collection"
+    },
+    {
+      "type": "header",
+      "content": "Sale section"
+    },
+    {
+      "type": "text",
+      "id": "sale_title",
+      "label": "Sale title",
+      "default": "REBAJAS"
+    },
+    {
+      "type": "collection",
+      "id": "sale_collection",
+      "label": "Sale collection"
     }
   ],
   "presets": [
     {
       "name": "Home Template",
-      "category": "Indigo",
-      "blocks": [
-        { "type": "ticker_item", "settings": { "text": "Hombre" } },
-        { "type": "ticker_item", "settings": { "text": "Mujer" } },
-        { "type": "ticker_item", "settings": { "text": "Denim" } },
-        { "type": "ticker_item", "settings": { "text": "Nueva coleccion" } }
-      ]
+      "category": "Indigo"
     }
   ]
 }

@@ -1,0 +1,90 @@
+{% doc %}
+  Renders a seamlessly looping ticker banner.
+
+  @param {string} text - Text label to repeat in the ticker
+  @param {string} [theme] - Color theme: 'dark' (black bg) or 'blue' (navy bg). Defaults to 'dark'.
+
+  @example
+  {% render 'ticker', text: 'HOMBRE' %}
+  {% render 'ticker', text: 'CARRITO', theme: 'dark' %}
+{% enddoc %}
+
+{%- assign ticker_theme = theme | default: 'dark' -%}
+
+<div class="ticker ticker--{{ ticker_theme }}">
+  <div class="ticker__track">
+    <ul class="ticker__list">
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+      <li class="ticker__item">{{ text }}</li>
+      <li class="ticker__sep">&middot;</li>
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ticker {
+    overflow: hidden;
+    padding: 0.75rem 0;
+  }
+  .ticker--dark {
+    background: #000;
+    color: #fff;
+  }
+  .ticker--blue {
+    background: #1F3D7C;
+    color: #fff;
+  }
+  .ticker__track {
+    display: flex;
+  }
+  .ticker__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    animation: indigo-ticker var(--ticker-speed, 20s) linear infinite;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ticker__track:hover .ticker__list {
+    animation-play-state: paused;
+  }
+  .ticker__item,
+  .ticker__sep {
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 1rem;
+  }
+  @keyframes indigo-ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    document.querySelectorAll('.ticker__track:not([data-init])').forEach(function (track) {
+      track.setAttribute('data-init', '');
+      var list = track.querySelector('.ticker__list');
+      if (!list) return;
+      var clone = list.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+  })();
+{% endjavascript %}

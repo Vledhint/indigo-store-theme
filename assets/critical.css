@@ -1,6 +1,110 @@
-/** Critical CSS for the theme. This file is included on every page. */
+/** Critical CSS — loaded on every page */
 
-/* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--font-primary--family, sans-serif);
+  color: var(--color-foreground, #111);
+  background: var(--color-background, #fff);
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+/* ── Layout ── */
+.page-width {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-primary--family, sans-serif);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btn--primary {
+  background: #1F3D7C;
+  color: #fff;
+  border-color: #1F3D7C;
+}
+
+.btn--primary:hover {
+  background: #162d5c;
+  border-color: #162d5c;
+}
+
+.btn--outline {
+  background: transparent;
+  color: #1F3D7C;
+  border-color: #1F3D7C;
+}
+
+.btn--outline:hover {
+  background: #1F3D7C;
+  color: #fff;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+/* ── Header icon SVG colour fix ── */
+.header__icon svg,
 .bag-icon svg {
-    color: #fff;
+  color: #fff;
+  fill: none;
+  stroke: currentColor;
+}
+
+/* ── Shopify account web component ── */
+shopify-account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+shopify-account svg {
+  width: 1.4rem;
+  height: 1.4rem;
 }

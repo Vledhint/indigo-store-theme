@@ -1,41 +1,102 @@
-{% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
+{%- render 'ticker', text: collection.title, theme: 'dark' -%}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
-{% endcomment %}
+<div class="collection-filters">
+  <span class="collection-filters__label">{{ 'collections.filters' | t }}</span>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+</div>
 
-<h1>{{ collection.title }}</h1>
+<div class="collection-page">
+  {%- paginate collection.products by 12 -%}
+    <div class="collection-grid">
+      {%- for product in collection.products -%}
+        {%- render 'product-card', product: product -%}
+      {%- else -%}
+        <p class="collection-empty">{{ 'collections.empty' | t }}</p>
+      {%- endfor -%}
+    </div>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+    {%- if paginate.pages > 1 -%}
+      <div class="collection-pagination">
+        {{ paginate | default_pagination }}
       </div>
-    {% endfor %}
-
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+    {%- endif -%}
+  {%- endpaginate -%}
 </div>
 
 {% stylesheet %}
-  .collection-products {
+  .collection-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #e8e8e8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .collection-filters svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .collection-page {
+    padding: 1.5rem 2rem 3rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .collection-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+  .collection-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    font-size: 0.875rem;
+    color: #666;
+  }
+  .collection-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e8e8e8;
+  }
+  .collection-pagination a,
+  .collection-pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1.5px solid #1F3D7C;
+    color: #1F3D7C;
+    transition: background 0.15s, color 0.15s;
+  }
+  .collection-pagination .current,
+  .collection-pagination a:hover {
+    background: #1F3D7C;
+    color: #fff;
+  }
+  @media (max-width: 1024px) {
+    .collection-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .collection-page {
+      padding: 1rem 1rem 2rem;
+    }
+    .collection-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
   }
 {% endstylesheet %}
 

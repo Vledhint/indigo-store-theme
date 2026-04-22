@@ -1,60 +1,177 @@
-<header class="bg-[#1F3D7C]">
+<header class="site-header">
+  <nav class="header__nav" aria-label="Main navigation">
+    {%- for link in section.settings.menu.links -%}
+      <a href="{{ link.url }}" class="header__nav-link">{{ link.title }}</a>
+    {%- endfor -%}
+  </nav>
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+  <div class="header__logo">
+    <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo -%}
+        {{ section.settings.logo | image_url: width: 140 | image_tag: loading: 'eager', class: 'header__logo-img' }}
+      {%- else -%}
+        <span class="header__logo-text">
+          <span class="header__logo-indigo">IND<span class="header__logo-highlight">I</span>GO</span>
+          <span class="header__logo-store">STORE</span>
+        </span>
+      {%- endif -%}
+    </a>
   </div>
 
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
-
-  <div class="header__icons text-white">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
+  <div class="header__actions">
+    <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </a>
+    {%- if shop.customer_accounts_enabled -%}
+      <shopify-account menu="{{ section.settings.customer_account_menu }}" class="header__icon">
         {{ 'icon-account.svg' | inline_asset_content }}
       </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}" class="bag-icon text-white">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
+    {%- endif -%}
+    <a href="{{ routes.cart_url }}" class="header__icon header__cart" aria-label="Cart ({{ cart.item_count }} items)">
+      {%- if cart.item_count > 0 -%}
+        <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+      {%- endif -%}
       {{ 'icon-cart.svg' | inline_asset_content }}
     </a>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
+  .site-header {
+    background: #1F3D7C;
     height: 5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
-  header a {
-    position: relative;
+  .header__nav {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+  }
+  .header__nav-link {
+    color: #fff;
     text-decoration: none;
-    color: var(--color-foreground);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    transition: opacity 0.2s;
+  }
+  .header__nav-link:hover {
+    opacity: 0.65;
+  }
+  .header__logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .header__logo a {
+    text-decoration: none;
+    color: #fff;
+    display: block;
+  }
+  .header__logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    gap: 2px;
+  }
+  .header__logo-indigo {
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .header__logo-highlight {
+    display: inline-block;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 1.1em;
+    height: 1.1em;
+    line-height: 0.9;
+    text-align: center;
+    margin: 0 1px;
+  }
+  .header__logo-store {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+  }
+  .header__logo-img {
+    max-height: 2.75rem;
+    width: auto;
+    display: block;
+  }
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  .header__icon {
+    color: #fff;
+    text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    transition: opacity 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
   }
-  header a sup {
+  .header__icon:hover {
+    opacity: 0.65;
+  }
+  .header__icon svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
+  }
+  .header__cart {
+    position: relative;
+  }
+  .header__cart-count {
     position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+    top: -0.45rem;
+    right: -0.55rem;
+    background: #fff;
+    color: #1F3D7C;
+    font-size: 0.55rem;
+    font-weight: 800;
+    border-radius: 50%;
+    min-width: 1rem;
+    height: 1rem;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+    line-height: 1;
+  }
+  @media (max-width: 768px) {
+    .site-header {
+      padding: 0 1rem;
+    }
+    .header__nav {
+      gap: 0.875rem;
+    }
+    .header__nav-link {
+      font-size: 0.6rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .header__logo-indigo {
+      font-size: 1.1rem;
+    }
   }
 {% endstylesheet %}
 
@@ -62,6 +179,11 @@
 {
   "name": "t:general.header",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
     {
       "type": "link_list",
       "id": "menu",

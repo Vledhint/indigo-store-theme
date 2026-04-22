@@ -1,39 +1,70 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
-
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+<footer class="site-footer">
+  <div class="footer__inner">
+    <div class="footer__col">
+      <h3 class="footer__col-title">{{ section.settings.col1_title }}</h3>
+      {%- for link in section.settings.col1_menu.links -%}
+        <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+      {%- endfor -%}
+    </div>
+    <div class="footer__col">
+      <h3 class="footer__col-title">{{ section.settings.col2_title }}</h3>
+      {%- for link in section.settings.col2_menu.links -%}
+        <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+      {%- endfor -%}
+    </div>
+    <div class="footer__col">
+      <h3 class="footer__col-title">{{ section.settings.col3_title }}</h3>
+      {%- for link in section.settings.col3_menu.links -%}
+        <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+      {%- endfor -%}
+    </div>
   </div>
 </footer>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  .site-footer {
+    background: #000;
+    color: #fff;
+    padding: 3rem 2rem;
+    margin-top: auto;
   }
-  footer a {
+  .footer__inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .footer__col-title {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin: 0 0 0.25rem;
+  }
+  .footer__link {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #aaa;
     text-decoration: none;
-    color: var(--color-foreground);
+    transition: color 0.2s;
+    line-height: 1.6;
   }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
+  .footer__link:hover {
+    color: #fff;
+  }
+  @media (max-width: 640px) {
+    .footer__inner {
+      grid-template-columns: 1fr;
+    }
   }
 {% endstylesheet %}
 
@@ -42,15 +73,49 @@
   "name": "t:general.footer",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "Column 1"
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "type": "text",
+      "id": "col1_title",
+      "label": "Column 1 title",
+      "default": "Términos y condiciones"
+    },
+    {
+      "type": "link_list",
+      "id": "col1_menu",
+      "label": "Column 1 links"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "text",
+      "id": "col2_title",
+      "label": "Column 2 title",
+      "default": "Información"
+    },
+    {
+      "type": "link_list",
+      "id": "col2_menu",
+      "label": "Column 2 links"
+    },
+    {
+      "type": "header",
+      "content": "Column 3"
+    },
+    {
+      "type": "text",
+      "id": "col3_title",
+      "label": "Column 3 title",
+      "default": "Políticas"
+    },
+    {
+      "type": "link_list",
+      "id": "col3_menu",
+      "label": "Column 3 links"
     }
   ]
 }

@@ -14,21 +14,50 @@
     "comment_form_title": "Add a comment"
   },
   "cart": {
-    "checkout": "Checkout",
     "title": "Cart",
+    "checkout": "Pagar pedido",
     "update": "Update",
-    "remove": "Remove"
+    "remove": "Remove",
+    "quantity": "Cantidad",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "shipping_calculated": "Calculated at checkout",
+    "total": "Total",
+    "empty": "Your cart is empty.",
+    "continue_shopping": "Continue shopping"
+  },
+  "collections": {
+    "title": "Collections",
+    "filters": "Filtros",
+    "empty": "No products found."
   },
   "customers": {
     "login": {
-      "email": "Email",
-      "password": "Password",
-      "submit": "Sign in",
-      "title": "Login"
+      "email": "E-mail",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "title": "Iniciar sesión",
+      "forgot_password": "¿Olvidaste tu contraseña?"
+    },
+    "register": {
+      "email": "E-mail",
+      "password": "Contraseña",
+      "submit": "Crear cuenta",
+      "title": "Crear cuenta"
     }
   },
-  "collections": {
-    "title": "Collections"
+  "general": {
+    "navigation": {
+      "main": "Main navigation"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products...",
+      "submit": "Search"
+    },
+    "cart": {
+      "title": "Cart"
+    }
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -42,11 +71,28 @@
     "password": "Password",
     "enter": "Enter"
   },
+  "products": {
+    "add_to_cart": "Carrito",
+    "buy_now": "Comprar",
+    "size": "Talla",
+    "size_guide": "Guía de tallas",
+    "color": "Color",
+    "sold_out": "Agotado",
+    "description": "Descripción",
+    "shipping_returns": "Envío y devoluciones",
+    "care": "Cuidado del producto",
+    "legals": "Legales"
+  },
   "search": {
     "title": "Search",
     "placeholder": "Search articles, pages, or products",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "sections": {
+    "home": {
+      "sale_cta": "Explorar rebajas"
+    }
   }
 }
