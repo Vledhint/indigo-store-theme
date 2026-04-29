@@ -12,26 +12,44 @@
       {{ section.settings.hero_text }}
     </h1>
   </div>
+  <div class="absolute inset-0 flex blue-gradient"></div>
 </section>
 
 {%- comment -%} ── Features bar ── {%- endcomment -%}
-<section class="bg-[#1F3D7C] py-6 px-8">
-  <div class="grid grid-cols-4 sm:grid-cols-2 gap-4 max-w-[960px] mx-auto">
+<section class="bg-[#1F3D7C] py-6 px-8 text-center">
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 w-full sm:w-3/4 mx-auto text-center items-center">
     <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_1_image -%}
+        {{ section.settings.feature_1_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
       <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_1_label }}</span>
       <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_1_text }}</span>
+      {%- endif -%}
     </div>
     <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_2_image -%}
+        {{ section.settings.feature_2_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
       <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_2_label }}</span>
       <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_2_text }}</span>
+      {%- endif -%}
     </div>
     <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_3_image -%}
+        {{ section.settings.feature_3_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
       <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_3_label }}</span>
       <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_3_text }}</span>
+      {%- endif -%}
+
     </div>
     <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_4_image -%}
+        {{ section.settings.feature_4_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
       <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_4_label }}</span>
       <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_4_text }}</span>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -40,10 +58,23 @@
 {%- unless section.settings.men_collection == blank -%}
   {%- render 'ticker', text: section.settings.men_ticker_text, theme: 'dark' -%}
   <section class="px-8 py-8 sm:px-4 sm:py-5">
-    <div class="grid grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3 max-w-[1200px] mx-auto">
-      {%- for product in section.settings.men_collection.products limit: 4 -%}
-        {%- render 'product-card', product: product -%}
-      {%- endfor -%}
+    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto">
+        <div id="first-block" class="flex-auto w-1/2">
+          {%- render 'product-card', product: section.settings.men_collection.products[0] -%}
+        </div>
+        <div id="second-block" class="flex-auto w-1/2">
+          <div class="flex flex-row items-center justify-center text-center">
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.men_collection.products[1] -%}
+            </div>
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.men_collection.products[2] -%}
+            </div>
+          </div>
+          <div class="flex-auto w-full">
+          {%- render 'product-card', product: section.settings.men_collection.products[3] -%}
+          </div>
+        </div>
     </div>
   </section>
 {%- endunless -%}
@@ -135,6 +166,11 @@
       "content": "Features"
     },
     {
+      "type": "image_picker",
+      "id": "feature_1_image",
+      "label": "Feature 1 image",
+    },
+    {
       "type": "text",
       "id": "feature_1_label",
       "label": "Feature 1 label",
@@ -145,6 +181,11 @@
       "id": "feature_1_text",
       "label": "Feature 1 value",
       "default": "Eco Friendly"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_image",
+      "label": "Feature 2 image",
     },
     {
       "type": "text",
@@ -159,6 +200,11 @@
       "default": "Duraderas"
     },
     {
+      "type": "image_picker",
+      "id": "feature_3_image",
+      "label": "Feature 3 image",
+    },
+    {
       "type": "text",
       "id": "feature_3_label",
       "label": "Feature 3 label",
@@ -169,6 +215,11 @@
       "id": "feature_3_text",
       "label": "Feature 3 value",
       "default": "Resistentes"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_image",
+      "label": "Feature 4 image",
     },
     {
       "type": "text",

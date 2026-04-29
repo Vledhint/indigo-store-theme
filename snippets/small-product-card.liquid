@@ -4,7 +4,7 @@
   @param {product} product - The product to render
 
   @example
-  {% render 'product-card', product: product %}
+  {% render 'small-product-card', product: product %}
 {% enddoc %}
 
 {%- liquid
@@ -20,7 +20,7 @@
 <div class="flex flex-col">
   <a href="{{ product.url }}" class="group block overflow-hidden aspect-[4/5] bg-gray-100" aria-label="{{ product.title | escape }}">
     {%- if product.featured_image -%}
-      {{ product.featured_image | image_url: width: 600, height: 720, crop: 'center' | image_tag: loading: 'lazy', width: 600, height: 720, class: 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]' }}
+      {{ product.featured_image | image_url: width: 250, height: 250, crop: 'center' | image_tag: loading: 'lazy', width: 250, height: 250, class: 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]' }}
     {%- else -%}
       {{ 'product' | placeholder_svg_tag: 'w-full h-full object-cover' }}
     {%- endif -%}
@@ -31,11 +31,11 @@
       <input type="hidden" name="id" value="{{ current_variant.id }}">
       <input type="hidden" name="quantity" value="1">
       <button type="submit" class="flex-1 py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] border-r-0 bg-[#1F3D7C] text-white cursor-pointer transition-colors hover:bg-[#1F3D7C] hover:text-white font-[inherit] mr-3 rounded-s-full">
-        {{- 'products.add_to_cart' | t -}}
+        {{- 'products.add_to_cart_icon' | t -}}
       </button>
     </form>
     <a href="{{ product.url }}" class="flex-1 flex items-center justify-center py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] bg-[#1F3D7C] text-white no-underline transition-colors ml-3 rounded-r-full">
-      {{- 'products.buy_now' | t -}}
+      {{- 'products.buy_now_icon' | t -}}
     </a>
   </div>
 
