@@ -73,9 +73,9 @@
   },
   "products": {
     "add_to_cart": "Carrito",
-    "add_to_cart_icon": "cart",
+    "add_to_cart_icon": "c",
     "buy_now": "Comprar",
-    "buy_now_icon": "buy",
+    "buy_now_icon": "b",
     "size": "Talla",
     "size_guide": "Guía de tallas",
     "color": "Color",

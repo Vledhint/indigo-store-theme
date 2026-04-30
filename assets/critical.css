@@ -109,3 +109,10 @@ shopify-account svg {
       /* Blanco abajo */
     );
 }
+
+#tagline_video video {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+}

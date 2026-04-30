@@ -43,8 +43,8 @@
       {%- endif -%}
 
     </div>
-    <div class="flex flex-col items-center text-center text-white gap-1">
-      {%- if section.settings.feature_4_image -%}
+  <div class="flex flex-col items-center text-center text-white gap-1">
+    {%- if section.settings.feature_4_image -%}
         {{ section.settings.feature_4_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
       {%- else -%}
       <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_4_label }}</span>
@@ -58,12 +58,12 @@
 {%- unless section.settings.men_collection == blank -%}
   {%- render 'ticker', text: section.settings.men_ticker_text, theme: 'dark' -%}
   <section class="px-8 py-8 sm:px-4 sm:py-5">
-    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto">
+    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto gap-4">
         <div id="first-block" class="flex-auto w-1/2">
           {%- render 'product-card', product: section.settings.men_collection.products[0] -%}
         </div>
-        <div id="second-block" class="flex-auto w-1/2">
-          <div class="flex flex-row items-center justify-center text-center">
+        <div id="second-block" class="flex-auto w-1/2 gap-7">
+          <div class="flex flex-row items-center justify-center text-center gap-6">
             <div class="flex-auto w-1/2">
             {%- render 'small-product-card', product: section.settings.men_collection.products[1] -%}
             </div>
@@ -71,8 +71,8 @@
             {%- render 'small-product-card', product: section.settings.men_collection.products[2] -%}
             </div>
           </div>
-          <div class="flex-auto w-full">
-          {%- render 'product-card', product: section.settings.men_collection.products[3] -%}
+          <div class="flex-auto w-full gap-4">
+          {%- render 'medium-product-card', product: section.settings.men_collection.products[3] -%}
           </div>
         </div>
     </div>
@@ -81,11 +81,13 @@
 
 {%- comment -%} ── Tagline ── {%- endcomment -%}
 <section class="relative overflow-hidden">
-  {%- if section.settings.tagline_image -%}
-    {{ section.settings.tagline_image | image_url: width: 1600 | image_tag: loading: 'lazy', class: 'w-full h-auto max-h-[500px] object-cover block', width: 1600, height: 700 }}
+  <div id="tagline_video" class="justify-center items-center mx-auto w-full">
+  {%- if section.settings.tagline_video -%}
+    {{ section.settings.tagline_video | video_tag: autoplay: true, loop: true, controls: false }}
   {%- else -%}
     <div class="w-full aspect-[16/7] bg-gray-400"></div>
   {%- endif -%}
+  </div>
   <div class="absolute inset-0 flex items-center justify-center bg-black/35 px-8">
     <p class="text-white font-black italic text-center leading-tight max-w-[900px] text-[clamp(1.5rem,4vw,3.5rem)]">
       {{ section.settings.tagline_text }}
@@ -97,10 +99,23 @@
 {%- unless section.settings.women_collection == blank -%}
   {%- render 'ticker', text: section.settings.women_ticker_text, theme: 'dark' -%}
   <section class="px-8 py-8 sm:px-4 sm:py-5">
-    <div class="grid grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3 max-w-[1200px] mx-auto">
-      {%- for product in section.settings.women_collection.products limit: 4 -%}
-        {%- render 'product-card', product: product -%}
-      {%- endfor -%}
+    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto gap-4">
+        <div id="first-block" class="flex-auto w-1/2">
+          {%- render 'product-card', product: section.settings.women_collection.products[0] -%}
+        </div>
+        <div id="second-block" class="flex-auto w-1/2 gap-7">
+          <div class="flex flex-row items-center justify-center text-center gap-6">
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.women_collection.products[1] -%}
+            </div>
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.women_collection.products[2] -%}
+            </div>
+          </div>
+          <div class="flex-auto w-full gap-4">
+          {%- render 'medium-product-card', product: section.settings.women_collection.products[3] -%}
+          </div>
+        </div>
     </div>
   </section>
 {%- endunless -%}
@@ -109,10 +124,23 @@
 {%- unless section.settings.kids_collection == blank -%}
   {%- render 'ticker', text: section.settings.kids_ticker_text, theme: 'dark' -%}
   <section class="px-8 py-8 sm:px-4 sm:py-5">
-    <div class="grid grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3 max-w-[1200px] mx-auto">
-      {%- for product in section.settings.kids_collection.products limit: 4 -%}
-        {%- render 'product-card', product: product -%}
-      {%- endfor -%}
+    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto gap-4">
+        <div id="first-block" class="flex-auto w-1/2">
+          {%- render 'product-card', product: section.settings.kids_collection.products[0] -%}
+        </div>
+        <div id="second-block" class="flex-auto w-1/2 gap-7">
+          <div class="flex flex-row items-center justify-center text-center gap-6">
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.kids_collection.products[1] -%}
+            </div>
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.kids_collection.products[2] -%}
+            </div>
+          </div>
+          <div class="flex-auto w-full gap-4">
+          {%- render 'medium-product-card', product: section.settings.kids_collection.products[3] -%}
+          </div>
+        </div>
     </div>
   </section>
 {%- endunless -%}
@@ -253,9 +281,9 @@
       "content": "Tagline"
     },
     {
-      "type": "image_picker",
-      "id": "tagline_image",
-      "label": "Tagline background image"
+      "type": "video",
+      "id": "tagline_video",
+      "label": "Tagline background video",
     },
     {
       "type": "text",
