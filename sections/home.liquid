@@ -147,28 +147,24 @@
 
 {%- comment -%} ── Sale / Rebajas ── {%- endcomment -%}
 {%- unless section.settings.sale_collection == blank -%}
-  <section class="bg-[#1F3D7C] grid grid-cols-2 sm:grid-cols-1 min-h-[480px]">
-    <div class="flex flex-col items-start justify-center p-2 md:p-8 sm:p-6 gap-6">
-      {%- if section.settings.sale_image -%}
-        {{ section.settings.sale_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'w-full h-auto block max-h-[90vh] object-cover', width: 2000, height: 900 }}
-      {%- endif -%}
-      <h2 class="font-black italic uppercase text-white leading-none tracking-tight text-[clamp(4rem,10vw,8rem)]">
+  {%- if section.settings.sale_image -%}
+    {%- assign sales_image = section.settings.sale_image | image_url: width: 1250, height: 800 -%}
+  {%- endif -%}
+  <section class="min-h-[480px] relative">
+    <div class="flex flex-col sm:flex-row items-start w-full h-[600px] justify-center p-2 md:p-8 sm:p-6 gap-8 sm:gap-6 h-auto relative" style="background-image: url('{{ sales_image }}'); background-repeat: none; background-size: cover;">
+      <h2 class="font-black italic uppercase text-white leading-none tracking-tight text-6xl sm:text-[150px] relative md:absolute left-0 sm:left-40 top-0 sm:top-20 z-[2] text-center mx-auto justify-center items-center">
         {{ section.settings.sale_title }}
       </h2>
-      <a href="{{ section.settings.sale_collection.url }}" class="inline-flex items-center justify-center px-8 py-3 bg-white text-[#1F3D7C] text-xs font-extrabold uppercase tracking-[0.12em] no-underline hover:bg-gray-100 transition-colors">
-        {{- 'sections.home.sale_cta' | t -}}
-      </a>
-    </div>
-    <div class="grid grid-cols-2">
-      {%- for product in section.settings.sale_collection.products limit: 4 -%}
-        <a href="{{ product.url }}" class="group block overflow-hidden aspect-square">
-          {%- if product.featured_image -%}
-            {{ product.featured_image | image_url: width: 400, height: 400, crop: 'center' | image_tag: loading: 'lazy', width: 400, height: 400, class: 'w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.04]' }}
-          {%- else -%}
-            {{ 'product' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-          {%- endif -%}
-        </a>
-      {%- endfor -%}
+      <div class="relative w-full md:w-[60%] flex-none sm:flex items-center justify-center ms-auto gap-5 my-0 sm:my-5 ">
+          <div class="flex flex-col gap-5 mt-auto">
+            {%- render 'rect-product-sale-card', product: section.settings.sale_collection.products[2] -%}
+            {%- render 'rect-product-sale-card', product: section.settings.sale_collection.products[3] -%}
+          </div>
+          <div class="flex flex-col gap-5 mt-5 sm:mt-0">
+            {%- render 'rect-product-sale-card', product: section.settings.sale_collection.products[0] -%}
+            {%- render 'long-product-sale-card', product: section.settings.sale_collection.products[1] -%}
+          </div>
+      </div>
     </div>
   </section>
 {%- endunless -%}
