@@ -1,33 +1,90 @@
-{% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
+{%- render 'ticker', text: 'CARRITO', theme: 'dark' -%}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
-{% endcomment %}
+<div class="max-w-[860px] mx-auto px-6 pt-10 pb-16 sm:px-4">
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post">
 
-<h1>{{ 'cart.title' | t }}</h1>
+      <div class="flex flex-col">
+        {%- for item in cart.items -%}
+          <div class="grid grid-cols-[120px_1fr_auto] sm:grid-cols-[80px_1fr] gap-5 py-6 border-b border-gray-200 items-start">
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+            <a href="{{ item.url }}" class="block overflow-hidden aspect-[5/6] bg-gray-100">
+              {%- if item.image -%}
+                {{ item.image | image_url: width: 200, height: 240, crop: 'center' | image_tag: loading: 'lazy', width: 200, height: 240, class: 'w-full h-full object-cover block' }}
+              {%- else -%}
+                {{ 'product' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+              {%- endif -%}
+            </a>
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+            <div class="flex flex-col gap-1.5">
+              <a href="{{ item.url }}" class="text-[13px] font-bold uppercase tracking-wide text-gray-900 no-underline hover:text-[#1F3D7C] transition-colors">
+                {{- item.product.title | escape -}}
+              </a>
+              {%- unless item.product.has_only_default_variant -%}
+                <p class="text-xs text-gray-500 m-0">{{ item.variant.title }}</p>
+              {%- endunless -%}
+
+              <div class="flex items-center gap-3 mt-2 flex-wrap">
+                <span class="text-[11px] font-bold uppercase tracking-wide text-gray-500">{{ 'cart.quantity' | t }}</span>
+                <div class="flex items-center border border-gray-300">
+                  <button type="button" class="qty-minus w-8 h-8 flex items-center justify-center bg-transparent border-none cursor-pointer text-base text-gray-700 hover:bg-gray-100 transition-colors" data-line="{{ forloop.index }}" aria-label="Decrease">&#8722;</button>
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0"
+                    class="w-10 h-8 text-center border-none border-l border-r border-gray-300 text-sm font-semibold font-[inherit] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    data-line="{{ forloop.index }}" aria-label="{{ 'cart.quantity' | t }}">
+                  <button type="button" class="qty-plus w-8 h-8 flex items-center justify-center bg-transparent border-none cursor-pointer text-base text-gray-700 hover:bg-gray-100 transition-colors" data-line="{{ forloop.index }}" aria-label="Increase">&#43;</button>
+                </div>
+                <a href="{{ item.url_to_remove }}" class="flex items-center text-red-500 hover:opacity-70 transition-opacity" aria-label="{{ 'cart.remove' | t }}">
+                  <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="text-sm font-bold text-gray-900 pt-0.5 sm:col-start-2">{{ item.line_price | money }}</div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="flex flex-col gap-2.5 items-end max-w-[360px] ml-auto pt-6">
+        <div class="flex justify-between w-full text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <span>{{ 'cart.subtotal' | t }}</span>
+          <span>{{ cart.items_subtotal_price | money }}</span>
+        </div>
+        <div class="flex justify-between w-full text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <span>{{ 'cart.shipping' | t }}</span>
+          <span>{{ 'cart.shipping_calculated' | t }}</span>
+        </div>
+        <div class="flex justify-between w-full text-sm font-extrabold uppercase tracking-wide text-[#1F3D7C] border-t-2 border-[#1F3D7C] pt-2.5 mt-1">
+          <span>{{ 'cart.total' | t }}</span>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+        <button type="submit" name="checkout" class="w-full mt-2 py-4 bg-[#1F3D7C] text-white border-none text-xs font-extrabold uppercase tracking-[0.15em] cursor-pointer font-[inherit] hover:bg-[#162d5c] transition-colors">
+          {{- 'cart.checkout' | t -}}
+        </button>
+      </div>
+
+    </form>
+  {%- else -%}
+    <div class="text-center py-16 flex flex-col items-center gap-4">
+      <p class="text-sm text-gray-500">{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.root_url }}" class="inline-flex items-center justify-center px-8 py-3 bg-[#1F3D7C] text-white text-xs font-bold uppercase tracking-[0.12em] no-underline hover:bg-[#162d5c] transition-colors">
+        {{- 'cart.continue_shopping' | t -}}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% javascript %}
+  (function () {
+    document.querySelectorAll('.qty-minus, .qty-plus').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = btn.parentElement.querySelector('input[type="number"]');
+        var val = parseInt(input.value, 10) || 0;
+        input.value = btn.classList.contains('qty-minus') ? Math.max(0, val - 1) : val + 1;
+      });
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {

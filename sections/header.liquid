@@ -1,60 +1,57 @@
-<header class="bg-blue">
+<header class="bg-[#1F3D7C] h-20 flex items-center justify-between px-8 sticky top-0 z-[100] md:px-4">
+  <nav class="flex gap-8 flex-1 md:gap-4 text-white" aria-label="Main navigation">
+    {%- for link in section.settings.menu.links -%}
+      <a href="{{ link.url }}" class="text-white no-underline text-[11px] font-extrabold uppercase tracking-[0.12em] hover:opacity-65 transition-opacity">
+        {{- link.title -}}
+      </a>
+    {%- endfor -%}
+  </nav>
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+  <div class="flex-1 flex justify-center">
+    <a href="{{ routes.root_url }}" class="no-underline text-white" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo -%}
+        {{ section.settings.logo | image_url: width: 140 | image_tag: loading: 'eager', class: 'max-h-11 w-auto block' }}
+      {%- else -%}
+        <span class="flex flex-col items-center leading-none gap-0.5">
+          <span class="text-xl font-black tracking-[0.18em] uppercase">
+            IND<span class="inline-block border-2 border-white rounded-full w-[1.05em] h-[1.05em] leading-[0.85] text-center mx-px align-middle">I</span>GO
+          </span>
+          <span class="text-[9px] font-bold tracking-[0.5em] uppercase">STORE</span>
+        </span>
+      {%- endif -%}
+    </a>
   </div>
 
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
+  <div class="flex items-center gap-5 flex-1 justify-end">
+    <a href="{{ routes.search_url }}" class="text-white no-underline flex items-center justify-center hover:opacity-65 transition-opacity" aria-label="Search">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </a>
+    {%- if shop.customer_accounts_enabled -%}
+      <shopify-account menu="{{ section.settings.customer_account_menu }}" class="flex items-center justify-center text-white hover:opacity-65 transition-opacity cursor-pointer">
         {{ 'icon-account.svg' | inline_asset_content }}
       </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
+    {%- endif -%}
+    <a href="{{ routes.cart_url }}" class="relative text-white no-underline flex items-center justify-center hover:opacity-65 transition-opacity" aria-label="Cart ({{ cart.item_count }} items)">
+      {%- if cart.item_count > 0 -%}
+        <span class="absolute -top-1.5 -right-1.5 bg-white text-[#1F3D7C] text-[9px] font-extrabold rounded-full min-w-[1rem] h-4 flex items-center justify-center px-0.5 leading-none" aria-hidden="true">
+          {{- cart.item_count -}}
+        </span>
+      {%- endif -%}
       {{ 'icon-cart.svg' | inline_asset_content }}
     </a>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .site-header shopify-account svg,
+  .site-header svg {
+    width: 1.4rem;
+    height: 1.4rem;
   }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
+  shopify-account svg {
+    color: #fff;
+    fill: none;
+    stroke: currentColor;
   }
 {% endstylesheet %}
 
@@ -62,6 +59,11 @@
 {
   "name": "t:general.header",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
     {
       "type": "link_list",
       "id": "menu",
