@@ -244,6 +244,9 @@
   .top-20 {
     top: calc(var(--spacing) * 20);
   }
+  .top-auto {
+    top: auto;
+  }
   .-right-1\.5 {
     right: calc(var(--spacing) * -1.5);
   }
@@ -252,6 +255,9 @@
   }
   .right-1 {
     right: calc(var(--spacing) * 1);
+  }
+  .right-1\/2 {
+    right: calc(1 / 2 * 100%);
   }
   .right-2 {
     right: calc(var(--spacing) * 2);
@@ -286,11 +292,20 @@
   .bottom-15 {
     bottom: calc(var(--spacing) * 15);
   }
+  .bottom-20 {
+    bottom: calc(var(--spacing) * 20);
+  }
+  .bottom-25 {
+    bottom: calc(var(--spacing) * 25);
+  }
   .left-0 {
     left: calc(var(--spacing) * 0);
   }
   .left-1 {
     left: calc(var(--spacing) * 1);
+  }
+  .left-1\/2 {
+    left: calc(1 / 2 * 100%);
   }
   .left-2 {
     left: calc(var(--spacing) * 2);
@@ -457,6 +472,9 @@
   .h-\[600px\] {
     height: 600px;
   }
+  .h-\[700px\] {
+    height: 700px;
+  }
   .h-\[800px\] {
     height: 800px;
   }
@@ -523,6 +541,12 @@
   .w-\[100\%\] {
     width: 100%;
   }
+  .w-\[100px\] {
+    width: 100px;
+  }
+  .w-\[150px\] {
+    width: 150px;
+  }
   .w-\[250px\] {
     width: 250px;
   }
@@ -538,6 +562,9 @@
   .w-\[550px\] {
     width: 550px;
   }
+  .w-\[600px\] {
+    width: 600px;
+  }
   .w-\[1250px\] {
     width: 1250px;
   }
@@ -546,6 +573,15 @@
   }
   .w-full {
     width: 100%;
+  }
+  .max-w-\[100px\] {
+    max-width: 100px;
+  }
+  .max-w-\[150px\] {
+    max-width: 150px;
+  }
+  .max-w-\[200px\] {
+    max-width: 200px;
   }
   .max-w-\[350px\] {
     max-width: 350px;
@@ -591,6 +627,10 @@
   }
   .basis-2\/3 {
     flex-basis: calc(2 / 3 * 100%);
+  }
+  .-translate-x-1\/2 {
+    --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .-translate-y-1\/2 {
     --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
@@ -1226,6 +1266,9 @@
   }
   .\[text-shadow\:0_2px_20px_rgba\(0\,0\,0\,0\.4\)\] {
     text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  }
+  .min-inline-24 {
+    min-inline-size: calc(var(--spacing) * 24);
   }
   .text-shadow-lg {
     text-shadow: 0px 1px 2px var(--tw-text-shadow-color, rgb(0 0 0 / 0.1)), 0px 3px 2px var(--tw-text-shadow-color, rgb(0 0 0 / 0.1)), 0px 4px 8px var(--tw-text-shadow-color, rgb(0 0 0 / 0.1));
