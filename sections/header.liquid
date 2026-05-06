@@ -37,7 +37,9 @@
           {{- cart.item_count -}}
         </span>
       {%- endif -%}
-      {{ 'icon-cart.svg' | inline_asset_content }}
+      <div class="cart-icon">
+        {{ 'icon-cart.svg' | inline_asset_content | strip }}
+      </div>
     </a>
   </div>
 </header>
