@@ -21,7 +21,7 @@
     "quantity": "Cantidad",
     "subtotal": "Subtotal",
     "shipping": "Envío",
-    "shipping_calculated": "Calculated at checkout",
+    "shipping_calculated": "Se calcula en el pago",
     "total": "Total",
     "empty": "Your cart is empty.",
     "continue_shopping": "Continue shopping"
