@@ -29,7 +29,10 @@
   "collections": {
     "title": "Collections",
     "filters": "Filtros",
-    "empty": "No products found."
+    "empty": "No products found.",
+    "apply_filters": "Aplicar filtros",
+    "clear_all": "Limpiar todo",
+    "no_filters": "Sin filtros"
   },
   "customers": {
     "login": {
