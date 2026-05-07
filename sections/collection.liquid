@@ -9,7 +9,7 @@
 <div id="filters-overlay" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="{{ 'collections.filters' | t }}">
   <div id="filters-backdrop" class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300"></div>
 
-  <div id="filters-panel" class="absolute left-0 top-0 h-full w-80 bg-white flex flex-col -translate-x-1/3 transition-transform duration-300 sm:w-1/3">
+  <div id="filters-panel" class="absolute left-0 top-0 h-full w-80 bg-white flex flex-col -translate-x-1/3 transition-transform duration-300 sm:w-full">
     <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200 shrink-0">
       <span class="text-xs font-bold uppercase tracking-[0.08em]">{{ 'collections.filters' | t }}</span>
       <button id="filters-close" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-0 font-[inherit]" aria-label="Close filters">
@@ -17,7 +17,10 @@
       </button>
     </div>
 
-    <form id="filters-form" action="{{ request.path }}" method="get" class="flex flex-col flex-1 overflow-hidden">
+    {% comment %}
+      {{ request.path }}
+    {% endcomment %}
+    <form id="filters-form" method="get" class="flex flex-col flex-1 overflow-hidden">
       {%- if collection.sort_by != blank -%}
         <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
       {%- endif -%}
@@ -62,12 +65,20 @@
                 <div class="flex items-end gap-2">
                   <div class="flex-1">
                     <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1.5">Min</label>
-                    <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | divided_by: 100.0 | default: '' }}" placeholder="{{ filter.range_min | money_without_currency }}" min="{{ filter.range_min | divided_by: 100.0 }}" max="{{ filter.range_max | divided_by: 100.0 }}" class="w-full border border-gray-200 px-2.5 py-2 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors">
+                    {% if filter.min_value.value > 0.0 %}
+                    <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | divided_by: 100.0 }}" placeholder="{{ filter.range_min | money_without_currency }}" min="{{ filter.range_min | divided_by: 100.0 }}" max="{{ filter.range_max | divided_by: 100.0 }}" class="w-full border border-gray-200 px-2.5 py-2 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors">
+                    {% else %}  
+                    <input type="number" name="{{ filter.min_value.param_name }}" value="" placeholder="{{ filter.range_min | money_without_currency }}" min="{{ filter.range_min | divided_by: 100.0 }}" max="{{ filter.range_max | divided_by: 100.0 }}" class="w-full border border-gray-200 px-2.5 py-2 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors">
+                    {% endif %}
                   </div>
                   <span class="text-gray-300 pb-2.5">—</span>
                   <div class="flex-1">
                     <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1.5">Max</label>
-                    <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | divided_by: 100.0 | default: '' }}" placeholder="{{ filter.range_max | money_without_currency }}" min="{{ filter.range_min | divided_by: 100.0 }}" max="{{ filter.range_max | divided_by: 100.0 }}" class="w-full border border-gray-200 px-2.5 py-2 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors">
+                    {% if filter.max_value.value > 0.0 %}
+                    <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | divided_by: 100.0 }}" placeholder="{{ filter.range_max | money_without_currency }}" min="{{ filter.range_min | divided_by: 100.0 }}" max="{{ filter.range_max | divided_by: 100.0 }}" class="w-full border border-gray-200 px-2.5 py-2 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors">
+                    {% else %}
+                    <input type="number" name="{{ filter.max_value.param_name }}" value="" placeholder="{{ filter.range_max | money_without_currency }}" min="{{ filter.range_min | divided_by: 100.0 }}" max="{{ filter.range_max | divided_by: 100.0 }}" class="w-full border border-gray-200 px-2.5 py-2 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors">
+                    {% endif %}
                   </div>
                 </div>
               {%- endif -%}
