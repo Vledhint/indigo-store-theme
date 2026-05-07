@@ -19,10 +19,9 @@
 </section>
 
 {%- if section.blocks.size > 0 -%}
-  <div class="category-mosaic grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-rows-[300px] md:auto-rows-[240px] sm:auto-rows-[220px] gap-px bg-gray-200">
+  <div class="category-mosaic grid grid-cols-1 sm:grid-cols-3 auto-rows-[350px] sm:auto-rows-[550px] gap-px bg-white">
     {%- for block in section.blocks -%}
-      <a href="{{ block.settings.link }}"
-        class="category-tile category-tile--{{ block.settings.size }} group relative block overflow-hidden bg-black no-underline"
+      <a href="{{ block.settings.link }}" class="category-tile category-tile--{{ block.settings.size }} group relative block overflow-hidden bg-black no-underline"
         {{ block.shopify_attributes }}
       >
         {%- if block.settings.image -%}
@@ -110,11 +109,11 @@
     {
       "name": "t:general.indigo_grid",
       "blocks": [
-        { "type": "category_tile", "settings": { "label": "JEANS", "size": "tall" } },
+        { "type": "category_tile", "settings": { "label": "JEANS", "size": "normal" } },
         { "type": "category_tile", "settings": { "label": "CHAMARRAS", "size": "normal" } },
         { "type": "category_tile", "settings": { "label": "PLAYERAS", "size": "normal" } },
         { "type": "category_tile", "settings": { "label": "SUDADERAS", "size": "normal" } },
-        { "type": "category_tile", "settings": { "label": "CAMISAS", "size": "wide" } },
+        { "type": "category_tile", "settings": { "label": "CAMISAS", "size": "normal" } },
         { "type": "category_tile", "settings": { "label": "BERMUDAS", "size": "normal" } },
         { "type": "category_tile", "settings": { "label": "LIQUIDACIÓN", "size": "normal" } },
         { "type": "category_tile", "settings": { "label": "EDICIÓN LIMITADA", "size": "normal" } }
