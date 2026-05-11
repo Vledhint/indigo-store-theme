@@ -9,15 +9,16 @@
 
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
-  assign color_option_index = nil
+  assign size_option_index = nil
   for option in product.options
-    if option == 'Color' or option == 'color' or option == 'Colour' or option == 'colour' or option == 'COLOR'
-      assign color_option_index = forloop.index0
+    assign option_lower = option | downcase
+    if option_lower == 'size' or option_lower == 'talla' or option_lower == 'taille'
+      assign size_option_index = forloop.index0
     endif
   endfor
 -%}
 
-<div class="flex flex-col relative">
+<div class="flex flex-col relative" data-product-id="{{ product.id }}">
   <a href="{{ product.url }}" class="group block overflow-hidden aspect-[4/5] bg-white" aria-label="{{ product.title | escape }}">
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' | image_tag: loading: 'lazy', width: 600, height: 600, class: 'w-[600px] h-[600px] object-cover transition-transform duration-500 group-hover:scale-[1.04]' }}
@@ -31,17 +32,142 @@
     <p class="text-xs font-semibold text-white text-shadow-lg/50">{{ product.price | money }}</p>
   </div>
 
-  <div class="flex mt-2 absolute bottom-10 left-0 right-0">
-    <form action="{{ routes.cart_add_url }}" method="post" class="flex flex-1">
-      <input type="hidden" name="id" value="{{ current_variant.id }}">
-      <input type="hidden" name="quantity" value="1">
-      <button type="submit" class="flex-1 py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] border-r-0 bg-[#1F3D7C] text-white cursor-pointer transition-colors hover:bg-[#1F3D7C] hover:text-white font-[inherit] mr-3 rounded-s-full">
+  <!-- Default: Add to Cart + Buy Now buttons -->
+  <div id="card-buttons-{{ product.id }}" class="flex mt-2 absolute bottom-10 left-0 right-0">
+    {%- if size_option_index != nil -%}
+      <button
+        type="button"
+        onclick="showSizePicker('{{ product.id }}')"
+        class="flex-1 py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] border-r-0 bg-[#1F3D7C] text-white cursor-pointer transition-colors hover:opacity-85 font-[inherit] mr-3 rounded-s-full"
+      >
         {{- 'products.add_to_cart' | t -}}
       </button>
-    </form>
-    <a href="{{ product.url }}" class="flex-1 flex items-center justify-center py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] bg-[#1F3D7C] text-white no-underline transition-colors ml-3 rounded-r-full">
+    {%- else -%}
+      <button
+        type="button"
+        onclick="addToCartDirect('{{ product.id }}', {{ current_variant.id }}, this)"
+        class="flex-1 py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] border-r-0 bg-[#1F3D7C] text-white cursor-pointer transition-colors hover:opacity-85 font-[inherit] mr-3 rounded-s-full"
+      >
+        {{- 'products.add_to_cart' | t -}}
+      </button>
+    {%- endif -%}
+    <a href="{{ product.url }}" class="flex-1 flex items-center justify-center py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] bg-[#1F3D7C] text-white no-underline transition-colors hover:opacity-85 ml-3 rounded-r-full">
       {{- 'products.buy_now' | t -}}
     </a>
   </div>
 
+  <!-- Size dropdown: appears above buttons when Add to Cart is clicked -->
+  {%- if size_option_index != nil -%}
+    <div id="card-sizes-{{ product.id }}" class="hidden absolute bottom-[5.25rem] left-0 right-0 px-1 flex items-center gap-1">
+      <select
+        id="size-select-{{ product.id }}"
+        onchange="addToCartWithVariant('{{ product.id }}', this)"
+        class="flex-1 py-1.5 px-2 text-[11px] font-bold uppercase tracking-wide bg-white border border-[#1F3D7C] text-[#1F3D7C] cursor-pointer rounded-sm focus:outline-none focus:ring-1 focus:ring-[#1F3D7C]"
+        aria-label="Select size"
+      >
+        <option value="" disabled selected>— Select size —</option>
+        {%- for option in product.options_with_values -%}
+          {%- assign opt_lower = option.name | downcase -%}
+          {%- if opt_lower == 'size' or opt_lower == 'talla' or opt_lower == 'taille' -%}
+            {%- for value in option.values -%}
+              {%- assign pill_variant_id = nil -%}
+              {%- for variant in product.variants -%}
+                {%- if variant.available and variant.options[size_option_index] == value and pill_variant_id == nil -%}
+                  {%- assign pill_variant_id = variant.id -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <option value="{{ pill_variant_id }}"{% if pill_variant_id == nil %} disabled{% endif %}>
+                {{ value }}{% if pill_variant_id == nil %} (sold out){% endif %}
+              </option>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </select>
+      <button
+        type="button"
+        onclick="hideSizePicker('{{ product.id }}')"
+        class="flex-none px-2 py-1.5 bg-white border border-[#1F3D7C] text-[#1F3D7C] text-sm font-bold rounded-sm hover:bg-[#1F3D7C] hover:text-white transition-colors cursor-pointer"
+        aria-label="Cancel"
+      >✕</button>
+    </div>
+  {%- endif -%}
+
 </div>
+
+<script>
+  if (!window.__productCardJS) {
+    window.__productCardJS = true;
+
+    window.showSizePicker = function(productId) {
+      document.getElementById('card-sizes-' + productId).classList.remove('hidden');
+    };
+
+    window.hideSizePicker = function(productId) {
+      var picker = document.getElementById('card-sizes-' + productId);
+      picker.classList.add('hidden');
+      document.getElementById('size-select-' + productId).value = '';
+    };
+
+    function postToCart(variantId) {
+      return fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      }).then(function(res) {
+        if (!res.ok) throw new Error('cart_error');
+        return res.json();
+      });
+    }
+
+    function refreshCartCount() {
+      fetch('/cart.js')
+        .then(function(r) { return r.json(); })
+        .then(function(cart) {
+          document.querySelectorAll('[data-cart-count]').forEach(function(el) {
+            el.textContent = cart.item_count;
+          });
+          document.dispatchEvent(new CustomEvent('cart:updated', { detail: { count: cart.item_count } }));
+        });
+    }
+
+    function flashButton(btn, originalText) {
+      btn.textContent = '✓';
+      btn.disabled = true;
+      setTimeout(function() {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 1500);
+    }
+
+    window.addToCartWithVariant = function(productId, selectEl) {
+      var variantId = parseInt(selectEl.value, 10);
+      if (!variantId) return;
+      selectEl.disabled = true;
+
+      postToCart(variantId)
+        .then(function() {
+          hideSizePicker(productId);
+          var addBtn = document.querySelector('#card-buttons-' + productId + ' button');
+          if (addBtn) flashButton(addBtn, addBtn.textContent);
+          refreshCartCount();
+        })
+        .catch(function() {
+          selectEl.disabled = false;
+          selectEl.value = '';
+        });
+    };
+
+    window.addToCartDirect = function(productId, variantId, btn) {
+      var originalText = btn.textContent;
+      postToCart(variantId)
+        .then(function() {
+          flashButton(btn, originalText);
+          refreshCartCount();
+        })
+        .catch(function() {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        });
+    };
+  }
+</script>
