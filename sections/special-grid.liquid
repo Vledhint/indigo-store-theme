@@ -4,14 +4,14 @@
 {%- endcomment -%}
 
 <section class="relative overflow-hidden w-full">
-  {%- if section.settings.hero_image -%}
-    {{ section.settings.hero_image | image_url: width: 1600 | image_tag: loading: 'eager', class: 'w-full h-auto max-h-[70vh] object-cover block', width: 1600, height: 700 }}
+  {%- if section.settings.hero_video -%}
+    {{ section.settings.hero_video | video_tag: autoplay: true, loop: true, controls: false }}
   {%- else -%}
     <div class="w-full aspect-[16/7] bg-gray-400 flex items-center justify-center">
       {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full' }}
     </div>
   {%- endif -%}
-  <div class="absolute inset-0 flex items-end justify-start px-12 py-10 sm:px-6 sm:py-6 bg-gradient-to-t from-black/45 to-transparent">
+  <div class="absolute inset-0 flex items-center justify-center px-12 py-10 sm:px-6 sm:py-6 bg-gradient-to-t from-black/45 to-transparent">
     <h1 class="text-white font-black italic uppercase leading-none tracking-tight text-[clamp(3rem,10vw,8rem)] [text-shadow:0_2px_16px_rgba(0,0,0,0.3)]">
       {{ section.settings.hero_title }}
     </h1>
@@ -62,6 +62,11 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Hero image"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero background video",
     },
     {
       "type": "text",
