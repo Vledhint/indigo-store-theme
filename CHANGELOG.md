@@ -2,6 +2,11 @@
 
 All notable changes to the Indigo Store theme are documented here.
 
+## [Unreleased] — 2026-05-11
+
+### Added
+- `sections/header.liquid` — search input row always visible on mobile (below hamburger/logo/icons row); desktop search popup toggled by clicking the search icon, closes on Escape or outside click
+
 ## [Unreleased] — 2026-04-21
 
 ### Added
