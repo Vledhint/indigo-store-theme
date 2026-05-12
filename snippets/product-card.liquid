@@ -37,8 +37,8 @@
     {%- if size_option_index != nil -%}
       <button
         type="button"
-        onclick="showSizePicker('{{ product.id }}')"
-        class="flex-1 py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] border-r-0 bg-[#1F3D7C] text-white cursor-pointer transition-colors hover:opacity-85 font-[inherit] mr-3 rounded-s-full"
+        onclick="showSizePicker('{{ product.id }}', event)"
+        class="dropdown-toggle flex-1 py-2 px-1 text-[16px] uppercase tracking-wide border-[1.5px] border-[#1F3D7C] border-r-0 bg-[#1F3D7C] text-white cursor-pointer transition-colors hover:opacity-85 font-[inherit] mr-3 rounded-s-full"
       >
         {{- 'products.add_to_cart' | t -}}
       </button>
@@ -56,16 +56,22 @@
     </a>
   </div>
 
-  <!-- Size dropdown: appears above buttons when Add to Cart is clicked -->
+  <!-- Size dropdown menu: floats above buttons when Add to Cart is clicked -->
   {%- if size_option_index != nil -%}
-    <div id="card-sizes-{{ product.id }}" class="hidden absolute bottom-[5.25rem] left-0 right-0 px-1 flex items-center gap-1">
-      <select
-        id="size-select-{{ product.id }}"
-        onchange="addToCartWithVariant('{{ product.id }}', this)"
-        class="flex-1 py-1.5 px-2 text-[11px] font-bold uppercase tracking-wide bg-white border border-[#1F3D7C] text-[#1F3D7C] cursor-pointer rounded-sm focus:outline-none focus:ring-1 focus:ring-[#1F3D7C]"
-        aria-label="Select size"
-      >
-        <option value="" disabled selected>— Select size —</option>
+    <div
+      id="card-sizes-{{ product.id }}"
+      class="hidden absolute bottom-[5.25rem] left-0 right-0 z-20 bg-white border border-[#1F3D7C] rounded-lg shadow-xl overflow-hidden w-[200px]"
+    >
+      <div class="flex items-center justify-between px-3 py-1.5 bg-[#1F3D7C]">
+        <span class="text-[10px] font-bold uppercase tracking-[0.08em] text-white">{{ 'products.select_size' | t }}</span>
+        <button
+          type="button"
+          onclick="hideSizePicker('{{ product.id }}')"
+          class="text-white text-xs leading-none hover:opacity-70 transition-opacity cursor-pointer"
+          aria-label="Close"
+        >✕</button>
+      </div>
+      <div class="max-h-36 overflow-y-auto">
         {%- for option in product.options_with_values -%}
           {%- assign opt_lower = option.name | downcase -%}
           {%- if opt_lower == 'size' or opt_lower == 'talla' or opt_lower == 'taille' -%}
@@ -76,19 +82,20 @@
                   {%- assign pill_variant_id = variant.id -%}
                 {%- endif -%}
               {%- endfor -%}
-              <option value="{{ pill_variant_id }}"{% if pill_variant_id == nil %} disabled{% endif %}>
-                {{ value }}{% if pill_variant_id == nil %} (sold out){% endif %}
-              </option>
+              <button
+                type="button"
+                {%- if pill_variant_id != nil %}
+                onclick="addToCartFromDropdown('{{ product.id }}', {{ pill_variant_id }}, this)"
+                {%- endif %}
+                class="w-full text-left px-3 py-2 text-[11px] font-bold uppercase tracking-[0.06em] border-b border-gray-100 last:border-b-0 transition-colors font-[inherit]{% if pill_variant_id != nil %} text-[#1F3D7C] hover:bg-[#1F3D7C] hover:text-white cursor-pointer{% else %} text-gray-400 cursor-not-allowed{% endif %}"
+                {% if pill_variant_id == nil %}disabled{% endif %}
+              >
+                {{- value -}}{% if pill_variant_id == nil %} — {{ 'products.sold_out' | t }}{% endif %}
+              </button>
             {%- endfor -%}
           {%- endif -%}
         {%- endfor -%}
-      </select>
-      <button
-        type="button"
-        onclick="hideSizePicker('{{ product.id }}')"
-        class="flex-none px-2 py-1.5 bg-white border border-[#1F3D7C] text-[#1F3D7C] text-sm font-bold rounded-sm hover:bg-[#1F3D7C] hover:text-white transition-colors cursor-pointer"
-        aria-label="Cancel"
-      >✕</button>
+      </div>
     </div>
   {%- endif -%}
 
@@ -98,15 +105,26 @@
   if (!window.__productCardJS) {
     window.__productCardJS = true;
 
-    window.showSizePicker = function(productId) {
+    window.showSizePicker = function(productId, event) {
+      if (event) event.stopPropagation();
+      document.querySelectorAll('[id^="card-sizes-"]').forEach(function(el) {
+        if (el.id !== 'card-sizes-' + productId) el.classList.add('hidden');
+      });
       document.getElementById('card-sizes-' + productId).classList.remove('hidden');
     };
 
     window.hideSizePicker = function(productId) {
-      var picker = document.getElementById('card-sizes-' + productId);
-      picker.classList.add('hidden');
-      document.getElementById('size-select-' + productId).value = '';
+      document.getElementById('card-sizes-' + productId).classList.add('hidden');
     };
+
+    document.addEventListener('click', function(e) {
+      var card = e.target.closest('[data-product-id]');
+      document.querySelectorAll('[id^="card-sizes-"]').forEach(function(el) {
+        if (!card || el.id !== 'card-sizes-' + card.getAttribute('data-product-id')) {
+          el.classList.add('hidden');
+        }
+      });
+    });
 
     function postToCart(variantId) {
       return fetch('/cart/add.js', {
@@ -130,6 +148,10 @@
         });
     }
 
+    function redirectToCart() {
+      window.location.href = '/cart';
+    }
+
     function flashButton(btn, originalText) {
       btn.textContent = '✓';
       btn.disabled = true;
@@ -139,30 +161,30 @@
       }, 1500);
     }
 
-    window.addToCartWithVariant = function(productId, selectEl) {
-      var variantId = parseInt(selectEl.value, 10);
+    window.addToCartFromDropdown = function(productId, variantId, btn) {
       if (!variantId) return;
-      selectEl.disabled = true;
+      btn.disabled = true;
 
       postToCart(variantId)
         .then(function() {
           hideSizePicker(productId);
           var addBtn = document.querySelector('#card-buttons-' + productId + ' button');
-          if (addBtn) flashButton(addBtn, addBtn.textContent);
+          if (addBtn) flashButton(addBtn, addBtn.textContent.trim());
           refreshCartCount();
+          redirectToCart();
         })
         .catch(function() {
-          selectEl.disabled = false;
-          selectEl.value = '';
+          btn.disabled = false;
         });
     };
 
     window.addToCartDirect = function(productId, variantId, btn) {
-      var originalText = btn.textContent;
+      var originalText = btn.textContent.trim();
       postToCart(variantId)
         .then(function() {
           flashButton(btn, originalText);
           refreshCartCount();
+          redirectToCart();
         })
         .catch(function() {
           btn.disabled = false;
