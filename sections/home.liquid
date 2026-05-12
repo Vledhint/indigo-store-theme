@@ -57,17 +57,17 @@
 {%- comment -%} ── Men's section ── {%- endcomment -%}
 {%- unless section.settings.men_collection == blank -%}
   {%- render 'ticker', text: section.settings.men_ticker_text, theme: 'dark' -%}
-  <section class="px-8 py-8 sm:px-4 sm:py-5">
-    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto gap-4">
-        <div id="first-block" class="flex-auto w-1/2">
+  <section class="px-4 py-5 sm:px-8 sm:py-8">
+    <div class="flex flex-col sm:flex-row justify-center items-center text-center max-w-[1250px] w-full mx-auto gap-4">
+        <div id="first-block" class="flex-auto w-full md:w-1/2">
           {%- render 'product-card', product: section.settings.men_collection.products[0] -%}
         </div>
-        <div id="second-block" class="flex-auto w-1/2 gap-7">
-          <div class="flex flex-row items-center justify-center text-center gap-6">
-            <div class="flex-auto w-1/2">
+        <div id="second-block" class="flex-auto w-full md:w-1/2 gap-7">
+          <div class="flex flex-col sm:flex-row items-center justify-center text-center gap-6">
+            <div class="flex-auto w-full sm:w-1/2">
             {%- render 'small-product-card', product: section.settings.men_collection.products[1] -%}
             </div>
-            <div class="flex-auto w-1/2">
+            <div class="flex-auto w-full sm:w-1/2">
             {%- render 'small-product-card', product: section.settings.men_collection.products[2] -%}
             </div>
           </div>
