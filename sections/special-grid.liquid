@@ -1,0 +1,129 @@
+{%- comment -%}
+  Gender/category landing page — used for HOMBRE, MUJER, KIDS sections.
+  Hero image + configurable mosaic of sub-category tiles.
+{%- endcomment -%}
+
+<section class="relative overflow-hidden w-full">
+  {%- if section.settings.hero_video -%}
+    {{ section.settings.hero_video | video_tag: autoplay: true, loop: true, controls: false }}
+  {%- else -%}
+    <div class="w-full aspect-[16/7] bg-gray-400 flex items-center justify-center">
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full' }}
+    </div>
+  {%- endif -%}
+  <div class="absolute inset-0 flex items-center justify-center px-12 py-10 sm:px-6 sm:py-6 bg-gradient-to-t from-black/45 to-transparent">
+    <h1 class="text-white font-black italic uppercase leading-none tracking-tight text-[clamp(3rem,10vw,8rem)] [text-shadow:0_2px_16px_rgba(0,0,0,0.3)]">
+      {{ section.settings.hero_title }}
+    </h1>
+  </div>
+</section>
+
+{%- if section.blocks.size > 0 -%}
+  <div class="category-mosaic grid grid-cols-1 sm:grid-cols-3 auto-rows-[350px] sm:auto-rows-[550px] gap-px bg-white">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link }}" class="category-tile category-tile--{{ block.settings.size }} group relative block overflow-hidden bg-black no-underline"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.image -%}
+          {{ block.settings.image | image_url: width: 800, height: 960, crop: 'center' | image_tag: loading: 'lazy', width: 800, height: 960, class: 'w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.06] group-hover:opacity-85' }}
+        {%- else -%}
+          <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+            {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full' }}
+          </div>
+        {%- endif -%}
+        <div class="absolute inset-0 flex items-end justify-start px-6 py-5 bg-gradient-to-t from-black/55 to-transparent">
+          <span class="text-white font-black uppercase italic leading-none tracking-wide text-[clamp(1rem,3vw,1.75rem)]">
+            {{ block.settings.label }}
+          </span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .category-tile--wide { grid-column: span 2; }
+  .category-tile--tall { grid-row: span 2; }
+  @media (max-width: 768px) {
+    .category-tile--wide { grid-column: span 2; }
+    .category-tile--tall { grid-row: span 1; }
+  }
+  @media (max-width: 640px) {
+    .category-tile--wide,
+    .category-tile--tall { grid-column: span 1; grid-row: span 1; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.indigo_grid",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero background video",
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "HOMBRE"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_tile",
+      "name": "Category tile",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "JEANS"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Tile size",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "wide", "label": "Wide (2 columns)" },
+            { "value": "tall", "label": "Tall (2 rows)" }
+          ],
+          "default": "normal"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.indigo_grid",
+      "blocks": [
+        { "type": "category_tile", "settings": { "label": "JEANS", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "CHAMARRAS", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "PLAYERAS", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "SUDADERAS", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "CAMISAS", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "BERMUDAS", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "LIQUIDACIÓN", "size": "normal" } },
+        { "type": "category_tile", "settings": { "label": "EDICIÓN LIMITADA", "size": "normal" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

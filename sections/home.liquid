@@ -1,125 +1,361 @@
-
-{% comment %}
-  Welcome to Shopify theme development!
-{% endcomment %}
-
-<div class="welcome full-width">
-  <div class="bienvenida-content max-w-lg w-full">
-    <img class="h-auto max-w-full" src="{{'demo-image-3.webp' | asset_url }}" alt="hero-image" width="1200" height="801" />
+{%- comment -%} ── Hero ── {%- endcomment -%}
+<section class="relative w-full overflow-hidden">
+  {%- if section.settings.hero_image -%}
+    {{ section.settings.hero_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'w-full h-auto block max-h-[90vh] object-cover', width: 2000, height: 900 }}
+  {%- else -%}
+    <div class="w-full aspect-[16/7] bg-gray-300 flex items-center justify-center">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full' }}
+    </div>
+  {%- endif -%}
+  <div class="absolute inset-0 flex items-center justify-center bg-black/10">
+    <h1 class="text-white font-black uppercase italic text-center leading-none tracking-tight text-[clamp(3rem,10vw,9rem)] [text-shadow:0_2px_20px_rgba(0,0,0,0.4)]">
+      {{ section.settings.hero_text }}
+    </h1>
   </div>
-</div>
+  <div class="absolute inset-0 flex blue-gradient"></div>
+</section>
 
-<div class="highlights">
-  <div class="highlight">
-    <h3>Key Concepts</h3>
-    <p class="highlight-description">
-      Shopify themes are a package of template files, building blocks, and supporting assets. Use these building blocks
-      to create modular, customizable themes.
+{%- comment -%} ── Features bar ── {%- endcomment -%}
+<section class="bg-[#1F3D7C] py-6 px-8 text-center">
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 w-full sm:w-3/4 mx-auto text-center items-center">
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_1_image -%}
+        {{ section.settings.feature_1_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_1_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_1_text }}</span>
+      {%- endif -%}
+    </div>
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_2_image -%}
+        {{ section.settings.feature_2_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_2_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_2_text }}</span>
+      {%- endif -%}
+    </div>
+    <div class="flex flex-col items-center text-center text-white gap-1">
+      {%- if section.settings.feature_3_image -%}
+        {{ section.settings.feature_3_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_3_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_3_text }}</span>
+      {%- endif -%}
+
+    </div>
+  <div class="flex flex-col items-center text-center text-white gap-1">
+    {%- if section.settings.feature_4_image -%}
+        {{ section.settings.feature_4_image | image_url: width: 150 | image_tag: loading: 'eager', class: 'w-1/3 h-auto block max-h-[50vh] object-cover', width: 150, height: 150 }}
+      {%- else -%}
+      <span class="text-[10px] font-bold uppercase tracking-[0.15em] opacity-80">{{ section.settings.feature_4_label }}</span>
+      <span class="text-sm font-extrabold uppercase tracking-wide">{{ section.settings.feature_4_text }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- comment -%} ── Men's section ── {%- endcomment -%}
+{%- unless section.settings.men_collection == blank -%}
+  {%- render 'ticker', text: section.settings.men_ticker_text, theme: 'dark' -%}
+  <section class="px-4 py-5 sm:px-8 sm:py-8">
+    <div class="flex flex-col sm:flex-row justify-center items-center text-center max-w-[1250px] w-full mx-auto gap-4">
+        <div id="first-block" class="flex-auto w-full md:w-1/2">
+          {%- render 'product-card', product: section.settings.men_collection.products[0] -%}
+        </div>
+        <div id="second-block" class="flex-auto w-full md:w-1/2 gap-7">
+          <div class="flex flex-col sm:flex-row items-center justify-center text-center gap-6">
+            <div class="flex-auto w-full sm:w-1/2">
+            {%- render 'small-product-card', product: section.settings.men_collection.products[1] -%}
+            </div>
+            <div class="flex-auto w-full sm:w-1/2">
+            {%- render 'small-product-card', product: section.settings.men_collection.products[2] -%}
+            </div>
+          </div>
+          <div class="flex-auto w-full gap-4">
+          {%- render 'medium-product-card', product: section.settings.men_collection.products[3] -%}
+          </div>
+        </div>
+    </div>
+  </section>
+{%- endunless -%}
+
+{%- comment -%} ── Tagline ── {%- endcomment -%}
+<section class="relative overflow-hidden">
+  <div id="tagline_video" class="justify-center items-center mx-auto w-full">
+  {%- if section.settings.tagline_video -%}
+    {{ section.settings.tagline_video | video_tag: autoplay: true, loop: true, controls: false }}
+  {%- else -%}
+    <div class="w-full aspect-[16/7] bg-gray-400"></div>
+  {%- endif -%}
+  </div>
+  <div class="absolute inset-0 flex items-center justify-center bg-black/35 px-8">
+    <p class="text-white font-black italic font-thin text-center leading-tight max-w-[900px] text-3xl sm:text-7xl">
+      {{ section.settings.tagline_text }}
     </p>
-    <p>{{ 'Learn more about key concepts' | link_to: 'https://shopify.dev/docs/storefronts/themes/architecture' }}</p>
   </div>
+</section>
 
-  <div class="highlight">
-    <h3>Liquid</h3>
-    <p class="highlight-description">
-      The Liquid templating language is the backbone of Shopify themes, and is used to load dynamic content on
-      storefronts. Extend Liquid objects to store and present custom data using metafields.
-    </p>
-    <p>{{ 'View the Liquid reference' | link_to: 'https://shopify.dev/docs/api/liquid' }}</p>
-  </div>
+{%- comment -%} ── Women's section ── {%- endcomment -%}
+{%- unless section.settings.women_collection == blank -%}
+  {%- render 'ticker', text: section.settings.women_ticker_text, theme: 'dark' -%}
+  <section class="px-8 py-8 sm:px-4 sm:py-5">
+    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto gap-4">
+        <div id="first-block" class="flex-auto w-1/2">
+          {%- render 'product-card', product: section.settings.women_collection.products[0] -%}
+        </div>
+        <div id="second-block" class="flex-auto w-1/2 gap-7">
+          <div class="flex flex-row items-center justify-center text-center gap-6">
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.women_collection.products[1] -%}
+            </div>
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.women_collection.products[2] -%}
+            </div>
+          </div>
+          <div class="flex-auto w-full gap-4">
+          {%- render 'medium-product-card', product: section.settings.women_collection.products[3] -%}
+          </div>
+        </div>
+    </div>
+  </section>
+{%- endunless -%}
 
-  <div class="highlight">
-    <h3>Best Practices</h3>
-    <p class="highlight-description">
-      To optimize your theme development experience, Shopify has established a set of best practices that you can refer
-      to when developing your theme and setting up your toolchains and processes.
-    </p>
-    <p>{{ 'Follow best practices' | link_to: 'https://shopify.dev/docs/storefronts/themes/best-practices' }}</p>
-  </div>
-</div>
+{%- unless section.settings.banner_image == blank -%}
+  <section class="p-3 sm:p-0">
+    <div class="flex flex-col-1 justify-center items-center text-center w-full">
+      {%- if section.settings.banner_image -%}
+        {{ section.settings.banner_image | image_url: width: 1750 | image_tag: loading: 'eager', class: 'w-full h-auto block max-h-[50vh] object-cover', width: 1750, height: 500 }}
+      {%- endif -%}
+    </div>
+  </section>
+{%- endunless -%}
 
-{% stylesheet %}
-  .welcome {
-    display: grid;
-    grid-template-columns: var(--content-grid);
-    background-color: #f6f6f7;
-    padding: 72px 0;
-  }
+{%- comment -%} ── Kids' section ── {%- endcomment -%}
+{%- unless section.settings.kids_collection == blank -%}
+  {%- render 'ticker', text: section.settings.kids_ticker_text, theme: 'dark' -%}
+  <section class="px-8 py-8 sm:px-4 sm:py-5">
+    <div class="flex flex-row justify-center items-center text-center w-[1250px] mx-auto gap-4">
+        <div id="first-block" class="flex-auto w-1/2">
+          {%- render 'product-card', product: section.settings.kids_collection.products[0] -%}
+        </div>
+        <div id="second-block" class="flex-auto w-1/2 gap-7">
+          <div class="flex flex-row items-center justify-center text-center gap-6">
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.kids_collection.products[1] -%}
+            </div>
+            <div class="flex-auto w-1/2">
+            {%- render 'small-product-card', product: section.settings.kids_collection.products[2] -%}
+            </div>
+          </div>
+          <div class="flex-auto w-full gap-4">
+          {%- render 'medium-product-card', product: section.settings.kids_collection.products[3] -%}
+          </div>
+        </div>
+    </div>
+  </section>
+{%- endunless -%}
 
-  .welcome-content {
-    grid-column: 2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    padding: 0 24px;
-  }
-
-  .welcome-description {
-    max-width: 80ch;
-    line-height: 1.4;
-    margin-top: 1.5rem;
-  }
-
-  .icon {
-    width: 300px;
-  }
-
-  .highlights {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(3, 1fr);
-    margin-top: 50px;
-  }
-
-  @media (max-width: 1100px) {
-    .highlights {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .highlight {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 24px;
-    border-radius: 8px;
-    background-color: #eef3ff;
-    color: rgb(92, 95, 98);
-    line-height: 1.4;
-  }
-
-  .highlight > * + * {
-    margin-top: 1rem;
-  }
-
-  .highlight h3 {
-    font-size: 1rem;
-    color: rgb(32, 34, 35);
-  }
-
-  .highlight-description {
-    flex: 1 1;
-  }
-
-  .highlight a {
-    display: flex;
-    width: fit-content;
-    background-color: rgb(250, 251, 251);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px -3px 0px 0px inset, rgba(255, 255, 255, 0.9) 0px 2px 0px 0px inset;
-    border: 1px solid rgb(140, 145, 150);
-    border-radius: 4px;
-    color: rgb(92, 95, 98);
-    padding: 3px 10px 5px;
-    text-decoration: none;
-  }
-{% endstylesheet %}
+{%- comment -%} ── Sale / Rebajas ── {%- endcomment -%}
+{%- unless section.settings.sale_collection == blank -%}
+  {%- if section.settings.sale_image -%}
+    {%- assign sales_image = section.settings.sale_image | image_url: width: 1250, height: 800 -%}
+  {%- endif -%}
+  <section class="min-h-[480px] relative">
+    <div class="flex flex-col sm:flex-row items-start w-full h-[600px] justify-center p-2 md:p-8 sm:p-6 gap-8 sm:gap-6 h-auto relative" style="background-image: url('{{ sales_image }}'); background-repeat: none; background-size: cover;">
+      <h2 class="font-black italic uppercase text-white leading-none tracking-tight text-6xl sm:text-[150px] relative md:absolute left-0 sm:left-40 top-0 sm:top-20 z-[2] text-center mx-auto justify-center items-center">
+        {{ section.settings.sale_title }}
+      </h2>
+      <div class="relative w-full md:w-[60%] flex-none sm:flex items-center justify-center ms-auto gap-5 my-0 sm:my-5 ">
+          <div class="flex flex-col gap-5 mt-auto">
+            {%- render 'rect-product-sale-card', product: section.settings.sale_collection.products[2] -%}
+            {%- render 'rect-product-sale-card', product: section.settings.sale_collection.products[3] -%}
+          </div>
+          <div class="flex flex-col gap-5 mt-5 sm:mt-0">
+            {%- render 'rect-product-sale-card', product: section.settings.sale_collection.products[0] -%}
+            {%- render 'long-product-sale-card', product: section.settings.sale_collection.products[1] -%}
+          </div>
+      </div>
+    </div>
+  </section>
+{%- endunless -%}
 
 {% schema %}
 {
   "name": "Home",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_text",
+      "label": "Hero text",
+      "default": "No Rules, Just Denim"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_image",
+      "label": "Feature 1 image",
+    },
+    {
+      "type": "text",
+      "id": "feature_1_label",
+      "label": "Feature 1 label",
+      "default": "Lavado"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_text",
+      "label": "Feature 1 value",
+      "default": "Eco Friendly"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_image",
+      "label": "Feature 2 image",
+    },
+    {
+      "type": "text",
+      "id": "feature_2_label",
+      "label": "Feature 2 label",
+      "default": "Telas"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_text",
+      "label": "Feature 2 value",
+      "default": "Duraderas"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_image",
+      "label": "Feature 3 image",
+    },
+    {
+      "type": "text",
+      "id": "feature_3_label",
+      "label": "Feature 3 label",
+      "default": "Costuras"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_text",
+      "label": "Feature 3 value",
+      "default": "Resistentes"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_image",
+      "label": "Feature 4 image",
+    },
+    {
+      "type": "text",
+      "id": "feature_4_label",
+      "label": "Feature 4 label",
+      "default": "Fit"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_text",
+      "label": "Feature 4 value",
+      "default": "Ajustables"
+    },
+    {
+      "type": "header",
+      "content": "Men's section"
+    },
+    {
+      "type": "text",
+      "id": "men_ticker_text",
+      "label": "Men's ticker text",
+      "default": "HOMBRE"
+    },
+    {
+      "type": "collection",
+      "id": "men_collection",
+      "label": "Men's collection"
+    },
+    {
+      "type": "header",
+      "content": "Tagline"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Image",
+    },
+    {
+      "type": "video",
+      "id": "tagline_video",
+      "label": "Tagline background video",
+    },
+    {
+      "type": "text",
+      "id": "tagline_text",
+      "label": "Tagline",
+      "default": "Everyday denim. Every version of you"
+    },
+    {
+      "type": "header",
+      "content": "Women's section"
+    },
+    {
+      "type": "text",
+      "id": "women_ticker_text",
+      "label": "Women's ticker text",
+      "default": "MUJER"
+    },
+    {
+      "type": "collection",
+      "id": "women_collection",
+      "label": "Women's collection"
+    },
+    {
+      "type": "header",
+      "content": "Kids' section"
+    },
+    {
+      "type": "text",
+      "id": "kids_ticker_text",
+      "label": "Kids' ticker text",
+      "default": "KIDS"
+    },
+    {
+      "type": "collection",
+      "id": "kids_collection",
+      "label": "Kids' collection"
+    },
+    {
+      "type": "header",
+      "content": "Sale section"
+    },
+    {
+      "type": "image_picker",
+      "id": "sale_image",
+      "label": "Sale Image",
+    },
+    {
+      "type": "text",
+      "id": "sale_title",
+      "label": "Sale title",
+      "default": "REBAJAS"
+    },
+    {
+      "type": "collection",
+      "id": "sale_collection",
+      "label": "Sale collection"
+    }
+  ],
   "presets": [
     {
       "name": "Home Template",

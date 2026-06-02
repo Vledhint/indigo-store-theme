@@ -1,0 +1,53 @@
+{% doc %}
+  Renders a seamlessly looping ticker banner.
+
+  @param {string} text - Text label to repeat in the ticker
+  @param {string} [theme] - Color theme: 'dark' (black bg) or 'blue' (navy bg). Defaults to 'dark'.
+
+  @example
+  {% render 'ticker', text: 'HOMBRE' %}
+  {% render 'ticker', text: 'CARRITO', theme: 'dark' %}
+{% enddoc %}
+
+{%- assign ticker_theme = theme | default: 'dark' -%}
+
+{%- if ticker_theme == 'blue' -%}
+  <div class="overflow-hidden py-3 bg-[#1F3D7C] text-white">
+{%- else -%}
+  <div class="overflow-hidden py-3 bg-black text-white">
+{%- endif -%}
+  <div class="ticker-track flex" data-ticker>
+    <ul class="ticker-list flex list-none p-0 m-0 shrink-0 whitespace-nowrap">
+      {%- for i in (1..8) -%}
+        <li class="text-lg font-bold uppercase tracking-wide px-4">{{ text }}</li>
+        <li class="text-lg font-bold uppercase px-4">&middot;</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ticker-list {
+    animation: indigo-ticker var(--ticker-speed, 20s) linear infinite;
+  }
+  .ticker-track:hover .ticker-list {
+    animation-play-state: paused;
+  }
+  @keyframes indigo-ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    document.querySelectorAll('[data-ticker]:not([data-ticker-init])').forEach(function (track) {
+      track.setAttribute('data-ticker-init', '');
+      var list = track.querySelector('.ticker-list');
+      if (!list) return;
+      var clone = list.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+  })();
+{% endjavascript %}
