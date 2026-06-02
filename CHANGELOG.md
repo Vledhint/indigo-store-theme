@@ -2,6 +2,13 @@
 
 All notable changes to the Indigo Store theme are documented here.
 
+## [Unreleased] — 2026-06-02
+
+### Changed
+- `sections/search.liquid` — full redesign to match collection layout (without filters): ticker banner showing search terms, styled search form (max-width input + navy submit button consistent with collection design system), product results rendered via `category-product-card` in the same 4-column responsive grid, article/page results shown as fallback cards with aspect-ratio image and object-type label, pagination styled identically to collection
+- `sections/404.liquid` — full redesign to match theme design system: ticker banner with "404" text, oversized navy `#1F3D7C` 404 number (`120px` desktop / `80px` mobile, `font-black`), uppercase tracked labels and message, CTA button styled identically to the rest of the theme
+- `sections/page.liquid` — full redesign to match theme design system: ticker banner with page title, static `h1` with navy color and bottom border separator, centered content area (`max-w-[800px]`); rich-text content styled via `.page-content` CSS — headings (uppercase, tracked, navy), body text (13px, 1.75 line-height, gray-700), links (navy underline, hover opacity), blockquote (navy left border), tables (uppercase `th` with navy border, striped `td`), images and `hr`
+
 ## [Unreleased] — 2026-05-11
 
 ### Added

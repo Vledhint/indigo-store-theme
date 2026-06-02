@@ -1,19 +1,21 @@
-{% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
-
+{%- comment %}
+  404 template — styled to match the theme's design system.
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
-{% endcomment %}
+{% endcomment -%}
 
-<h1>{{ '404.title' | t }}</h1>
+{%- render 'ticker', text: '404', theme: 'dark' -%}
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
-
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+<div class="px-8 py-24 flex flex-col items-center text-center max-w-[600px] mx-auto sm:px-4 sm:py-16">
+  <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-3">{{ '404.title' | t }}</p>
+  <h1 class="text-[120px] font-black leading-none tracking-tighter text-[#1F3D7C] sm:text-[80px]">404</h1>
+  <p class="mt-6 text-xs uppercase tracking-[0.12em] text-gray-500">{{ '404.not_found' | t }}</p>
+  <a
+    href="{{ routes.all_products_collection_url }}"
+    class="mt-10 inline-block px-10 py-3.5 text-xs font-bold uppercase tracking-[0.08em] bg-[#1F3D7C] text-white no-underline hover:bg-[#163066] transition-colors"
+  >
+    {{ '404.back_to_shopping' | t }}
+  </a>
+</div>
 
 {% schema %}
 {

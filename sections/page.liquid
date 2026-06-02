@@ -1,13 +1,103 @@
-{% comment %}
-  This section is used in the page template to render store pages like About us
-  or Contact us.
-
+{%- comment %}
+  Page template — styled to match theme design system.
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
-{% endcomment %}
+{% endcomment -%}
 
-<h1>{{ page.title }}</h1>
+{%- render 'ticker', text: page.title, theme: 'dark' -%}
 
-{{ page.content }}
+<div class="px-8 py-16 max-w-[800px] mx-auto sm:px-4 sm:py-10">
+  <h1 class="text-xs font-bold uppercase tracking-[0.12em] text-[#1F3D7C] mb-10 pb-4 border-b border-gray-200">
+    {{ page.title }}
+  </h1>
+  <div class="page-content">
+    {{ page.content }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .page-content h1,
+  .page-content h2,
+  .page-content h3,
+  .page-content h4 {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #1F3D7C;
+  }
+  .page-content h1 { font-size: 1.25rem; }
+  .page-content h2 { font-size: 1rem; }
+  .page-content h3 { font-size: 0.8125rem; }
+  .page-content h4 { font-size: 0.75rem; }
+  .page-content p {
+    font-size: 0.8125rem;
+    line-height: 1.75;
+    color: #374151;
+    margin-bottom: 1rem;
+  }
+  .page-content a {
+    color: #1F3D7C;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.15s;
+  }
+  .page-content a:hover { opacity: 0.65; }
+  .page-content ul,
+  .page-content ol {
+    font-size: 0.8125rem;
+    line-height: 1.75;
+    color: #374151;
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .page-content ul { list-style: disc; }
+  .page-content ol { list-style: decimal; }
+  .page-content li { margin-bottom: 0.25rem; }
+  .page-content strong { font-weight: 700; }
+  .page-content em { font-style: italic; }
+  .page-content hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 2rem 0;
+  }
+  .page-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+  }
+  .page-content blockquote {
+    border-left: 3px solid #1F3D7C;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #6b7280;
+    font-size: 0.8125rem;
+  }
+  .page-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .page-content th {
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    font-size: 0.6875rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1.5px solid #1F3D7C;
+    color: #1F3D7C;
+  }
+  .page-content td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    vertical-align: top;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
