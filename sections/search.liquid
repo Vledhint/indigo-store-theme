@@ -1,64 +1,99 @@
-{% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
-
+{%- comment %}
+  Search results template — mirrors collection.liquid layout (no filters).
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
-{% endcomment %}
+{% endcomment -%}
 
-<h1>{{ 'search.title' | t }}</h1>
+{%- assign ticker_text = 'search.title' | t -%}
+{%- if search.performed and search.terms != blank -%}
+  {%- assign ticker_text = search.terms | upcase -%}
+{%- endif -%}
+{%- render 'ticker', text: ticker_text, theme: 'dark' -%}
 
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
-    type="search"
-    size="50"
-    name="q"
-    value="{{ search.terms | escape }}"
-    placeholder="{{ 'search.placeholder' | t }}"
-  >
-  <button type="submit">{{ 'search.submit' | t }}</button>
-</form>
+<div class="px-8 py-8 border-b border-gray-200 sm:px-4">
+  <form action="{{ routes.search_url }}" method="get" role="search" class="max-w-[700px] mx-auto flex">
+    <input
+      type="search"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'search.placeholder' | t }}"
+      autocomplete="off"
+      class="flex-1 border border-gray-200 border-r-0 px-4 py-3 text-xs font-[inherit] focus:outline-none focus:border-[#1F3D7C] transition-colors"
+    >
+    <button
+      type="submit"
+      class="px-6 py-3 text-xs font-bold uppercase tracking-[0.08em] bg-[#1F3D7C] text-white border border-[#1F3D7C] cursor-pointer font-[inherit] hover:bg-[#163066] transition-colors"
+    >
+      {{ 'search.submit' | t }}
+    </button>
+  </form>
+</div>
 
-{% if search.performed %}
-  {% if search.results_count == 0 %}
-    <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-  {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
-
-    <div class="search-results">
-      {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
-            {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
-              </p>
-            </div>
-          </div>
-        {% endfor %}
-
-        {{ paginate | default_pagination }}
-      {% endpaginate %}
+{%- if search.performed -%}
+  {%- if search.results_count == 0 -%}
+    <div class="px-8 py-20 text-center sm:px-4">
+      <p class="text-xs text-gray-400 uppercase tracking-[0.08em]">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
     </div>
-  {% endif %}
-{% endif %}
+  {%- else -%}
+    <div class="px-8 pt-5 pb-2 max-w-[1300px] mx-auto sm:px-4">
+      <p class="text-[11px] uppercase tracking-[0.08em] text-gray-400">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+    </div>
+
+    <div class="px-8 pt-4 pb-12 max-w-[1300px] mx-auto sm:px-4">
+      {%- paginate search.results by 20 -%}
+        <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5 sm:gap-3">
+          {%- for result in search.results -%}
+            {%- if result.object_type == 'product' -%}
+              {%- render 'category-product-card', product: result -%}
+            {%- else -%}
+              <a href="{{ result.url }}" class="flex flex-col no-underline group">
+                {%- assign result_image = result.image | default: result.featured_image -%}
+                {%- if result_image -%}
+                  {{ result_image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'w-full aspect-[4/5] object-cover bg-white transition-transform duration-500 group-hover:scale-[1.04]' }}
+                {%- else -%}
+                  <div class="w-full aspect-[4/5] bg-gray-100 flex items-center justify-center">
+                    {{ 'image' | placeholder_svg_tag: 'w-16 h-16 text-gray-300' }}
+                  </div>
+                {%- endif -%}
+                <div class="mt-2">
+                  <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">{{ result.object_type }}</p>
+                  <p class="text-[11px] font-bold uppercase tracking-[0.04em] leading-tight text-black group-hover:text-[#1F3D7C] transition-colors">{{ result.title | escape }}</p>
+                </div>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="search-pagination flex justify-center gap-2 mt-12 pt-8 border-t">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}
 
 {% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  .search-pagination span,
+  .search-pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1.5px solid #1F3D7C;
+    color: #1F3D7C;
+    transition: background 0.15s, color 0.15s;
   }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
+  .search-pagination .current,
+  .search-pagination span:hover,
+  .search-pagination a:hover {
+    background: #1F3D7C;
+    color: #fff;
   }
 {% endstylesheet %}
 
