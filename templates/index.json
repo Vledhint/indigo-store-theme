@@ -11,7 +11,34 @@
   "sections": {
     "main": {
       "type": "home",
-      "settings": {}
+      "settings": {
+        "hero_image": "shopify://shop_images/banner.webp",
+        "hero_text": "No Rules, Just Denim",
+        "feature_1_image": "shopify://shop_images/Frame.svg",
+        "feature_1_label": "Lavado",
+        "feature_1_text": "Eco Friendly",
+        "feature_2_image": "shopify://shop_images/Frame-1.svg",
+        "feature_2_label": "Telas",
+        "feature_2_text": "Duraderas",
+        "feature_3_image": "shopify://shop_images/Frame-2.svg",
+        "feature_3_label": "Costuras",
+        "feature_3_text": "Resistentes",
+        "feature_4_image": "shopify://shop_images/Frame-3.svg",
+        "feature_4_label": "Fit",
+        "feature_4_text": "Ajustables",
+        "men_ticker_text": "HOMBRE",
+        "men_collection": "hombres",
+        "banner_image": "shopify://shop_images/2banner_1.webp",
+        "tagline_video": "shopify://files/videos/Home_1.mov",
+        "tagline_text": "Everyday denim. Every version of you",
+        "women_ticker_text": "MUJER",
+        "women_collection": "hombres",
+        "kids_ticker_text": "KIDS",
+        "kids_collection": "hombres",
+        "sale_image": "shopify://shop_images/edicion-limitada_2.webp",
+        "sale_title": "REBAJAS",
+        "sale_collection": "hombres"
+      }
     }
   },
   "order": [
