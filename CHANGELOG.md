@@ -2,6 +2,15 @@
 
 All notable changes to the Indigo Store theme are documented here.
 
+## [Unreleased] — 2026-06-23
+
+### Added
+- `snippets/size-guide-modal.liquid` — modal reutilizable de guía de tallas: overlay oscuro, panel centrado con scroll, tabla estilizada en azul navy, cierre por botón, clic en backdrop o tecla Escape; accesible con `role="dialog"` y `aria-modal`
+- `.shopify/metafields.json` — metafield `custom.size_guide` (`rich_text_field`) en productos: permite editar la guía de tallas individualmente por producto desde Admin > Productos > Metafields
+
+### Changed
+- `sections/product.liquid` — el link "Guía de tallas" ahora es un `<button>` que abre el popup; se muestra condicionalmente solo si el producto tiene contenido de guía (metafield propio o fallback global); se agrega setting `default_size_guide` (richtext) al schema para configurar una guía global desde el personalizador del tema
+
 ## [Unreleased] — 2026-06-02
 
 ### Changed

@@ -85,9 +85,17 @@
         <input type="hidden" name="id" value="{{ current_variant.id }}">
       {%- endif -%}
 
-      <a href="#" class="self-center text-[11px] font-semibold uppercase tracking-wide text-gray-500 underline underline-offset-2 hover:text-gray-800 transition-colors">
-        {{- 'products.size_guide' | t -}}
-      </a>
+      {%- assign guide_content = product.metafields.custom.size_guide.value | default: section.settings.default_size_guide -%}
+      {%- if guide_content != blank -%}
+        <button
+          type="button"
+          onclick="openSizeGuide()"
+          class="self-center text-[11px] font-semibold uppercase tracking-wide text-gray-500 underline underline-offset-2 hover:text-gray-800 transition-colors bg-transparent border-none p-0 cursor-pointer font-[inherit]"
+        >
+          {{- 'products.size_guide' | t -}}
+        </button>
+        {%- render 'size-guide-modal', content: guide_content -%}
+      {%- endif -%}
 
       <div class="flex flex-col gap-2">
         <button type="submit" name="add" class="w-full py-3.5 text-xs font-extrabold uppercase tracking-[0.12em] border-2 border-[#1F3D7C] bg-white text-[#1F3D7C] cursor-pointer font-[inherit] hover:bg-gray-50 transition-colors">
@@ -147,6 +155,12 @@
 {
   "name": "t:general.product",
   "settings": [
+    {
+      "type": "richtext",
+      "id": "default_size_guide",
+      "label": "Guía de tallas por defecto",
+      "info": "Se muestra si el producto no tiene su propia guía de tallas en sus metafields. Puedes incluir una tabla HTML de medidas."
+    },
     {
       "type": "textarea",
       "id": "shipping_text",
